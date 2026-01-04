@@ -1,0 +1,35 @@
+# Virtual environment
+.venv
+venv
+__pycache__
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+
+# Git
+.git
+.gitignore
+
+# Python
+*.pyc
+*.pyo
+*.egg-info
+dist
+build
+
+# Environment files (use Docker env vars instead)
+.env
+.env.*
+!.env.example
+
+# Test files
+.pytest_cache
+.coverage
+htmlcov
+
+# Misc
+*.log
+.DS_Store
