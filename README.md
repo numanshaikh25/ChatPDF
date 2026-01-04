@@ -32,7 +32,7 @@ A full-stack application that allows you to upload PDF documents and chat with t
 - **PostgreSQL + pgvector** - Database with vector search
 - **SQLAlchemy** - ORM with async support
 - **LangChain** - LLM orchestration
-- **OpenAI API** - GPT-4o-mini and text-embedding-3-small
+- **OpenAI API** - GPT-5-mini and text-embedding-3-small
 - **Pdfplumber** - PDF text extraction
 - **Inngest** - Background job processing
 
