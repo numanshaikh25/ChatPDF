@@ -148,7 +148,7 @@ DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/chatpdf
 
 # OpenAI
 OPENAI_API_KEY=sk-your-openai-api-key-here
-OPENAI_MODEL=gpt-4o-mini
+OPENAI_MODEL=gpt-5-mini
 OPENAI_EMBEDDING_MODEL=text-embedding-3-small
 
 # MinIO
