@@ -1,3 +1,6 @@
+<img width="3024" height="1658" alt="image" src="https://github.com/user-attachments/assets/c57a9442-8017-4c2c-8dc7-a855a8880ee3" />
+
+
 # ChatPDF - AI-Powered PDF Chat Application
 
 A full-stack application that allows you to upload PDF documents and chat with them using AI. Built with Next.js, FastAPI, PostgreSQL with pgvector, and OpenAI's GPT-5-mini.
