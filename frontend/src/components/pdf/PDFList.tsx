@@ -1,7 +1,6 @@
 'use client'
 
 import { FileText, Loader2, Trash2, CheckCircle2, XCircle, Clock } from 'lucide-react'
-import { Button } from '@/components/ui/Button'
 import { usePDFList, useDeletePDF, usePDFStatus } from '@/hooks/usePDF'
 import { formatBytes, formatDate } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -46,43 +45,45 @@ function PDFListItem({
     <div
       onClick={onSelect}
       className={`
-        p-4 border-b cursor-pointer transition-colors hover:bg-accent/50
-        ${isSelected ? 'bg-accent' : ''}
+        mx-2 mb-1 rounded-xl px-3 py-3 cursor-pointer transition-all
+        hover:bg-accent/70 group
+        ${isSelected ? 'bg-accent ring-1 ring-primary/20 shadow-sm' : ''}
       `}
     >
-      <div className="flex items-start justify-between gap-2">
-        <div className="flex items-start gap-3 flex-1 min-w-0">
-          <FileText className="h-5 w-5 text-muted-foreground flex-shrink-0 mt-0.5" />
-          <div className="flex-1 min-w-0">
-            <p className="font-medium truncate">{currentPdf.filename}</p>
-            <div className="flex items-center gap-2 mt-1">
-              <StatusIcon
-                className={`h-4 w-4 ${config?.color} ${config?.spin ? 'animate-spin' : ''}`}
-              />
-              <span className="text-sm text-muted-foreground">{config?.label}</span>
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {formatBytes(currentPdf.file_size)} • {formatDate(currentPdf.created_at)}
-            </p>
+      <div className="flex items-start gap-2.5">
+        <div className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-lg mt-0.5 ${isSelected ? 'bg-primary/15' : 'bg-muted'}`}>
+          <FileText className={`h-4 w-4 ${isSelected ? 'text-primary' : 'text-muted-foreground'}`} />
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-sm font-medium truncate leading-tight">{currentPdf.filename}</p>
+          <div className="flex items-center gap-1.5 mt-1">
+            <StatusIcon
+              className={`h-3 w-3 ${config?.color} ${config?.spin ? 'animate-spin' : ''}`}
+            />
+            <span className="text-xs text-muted-foreground">{config?.label}</span>
             {currentPdf.total_pages && (
-              <p className="text-xs text-muted-foreground">{currentPdf.total_pages} pages</p>
-            )}
-            {currentPdf.error_message && (
-              <p className="text-xs text-red-500 mt-1">{currentPdf.error_message}</p>
+              <>
+                <span className="text-xs text-muted-foreground/50">·</span>
+                <span className="text-xs text-muted-foreground">{currentPdf.total_pages}p</span>
+              </>
             )}
           </div>
+          <p className="text-xs text-muted-foreground/70 mt-0.5">
+            {formatBytes(currentPdf.file_size)} · {formatDate(currentPdf.created_at)}
+          </p>
+          {currentPdf.error_message && (
+            <p className="text-xs text-destructive mt-1 truncate">{currentPdf.error_message}</p>
+          )}
         </div>
-        <Button
-          variant="ghost"
-          size="sm"
+        <button
           onClick={(e) => {
             e.stopPropagation()
             onDelete()
           }}
-          className="flex-shrink-0"
+          className="flex h-7 w-7 shrink-0 items-center justify-center rounded-lg opacity-0 group-hover:opacity-100 hover:bg-destructive/10 hover:text-destructive text-muted-foreground transition-all"
         >
-          <Trash2 className="h-4 w-4" />
-        </Button>
+          <Trash2 className="h-3.5 w-3.5" />
+        </button>
       </div>
     </div>
   )
@@ -107,24 +108,36 @@ export function PDFList({ selectedPdfId, onSelect }: PDFListProps) {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center h-32">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="px-2 py-2 space-y-1">
+        {[1, 2, 3].map((i) => (
+          <div key={i} className="mx-0 rounded-xl px-3 py-3 bg-muted/40 animate-pulse">
+            <div className="flex items-start gap-2.5">
+              <div className="h-8 w-8 rounded-lg bg-muted shrink-0" />
+              <div className="flex-1 space-y-2">
+                <div className="h-3 bg-muted rounded w-3/4" />
+                <div className="h-2.5 bg-muted rounded w-1/2" />
+              </div>
+            </div>
+          </div>
+        ))}
       </div>
     )
   }
 
   if (!data || data.pdfs.length === 0) {
     return (
-      <div className="text-center py-8 text-muted-foreground">
-        <FileText className="h-12 w-12 mx-auto mb-3 opacity-50" />
-        <p>No PDFs uploaded yet</p>
-        <p className="text-sm mt-1">Upload a PDF to get started</p>
+      <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+        <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-muted mb-3">
+          <FileText className="h-5 w-5 text-muted-foreground" />
+        </div>
+        <p className="text-sm font-medium text-muted-foreground">No documents yet</p>
+        <p className="text-xs text-muted-foreground/70 mt-1">Upload a PDF to get started</p>
       </div>
     )
   }
 
   return (
-    <div className="divide-y">
+    <div className="py-1">
       {data.pdfs.map((pdf) => (
         <PDFListItem
           key={pdf.pdf_id}

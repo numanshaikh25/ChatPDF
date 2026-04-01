@@ -119,53 +119,54 @@ export function PDFUploader({ onUploadComplete }: { onUploadComplete?: (pdfId: s
         <div
           {...getRootProps()}
           className={`
-            border-2 border-dashed rounded-lg p-8 text-center cursor-pointer
-            transition-colors duration-200
+            relative border-2 border-dashed rounded-xl p-5 text-center cursor-pointer
+            transition-all duration-200
             ${
               isDragActive
-                ? 'border-primary bg-primary/5'
-                : 'border-muted-foreground/25 hover:border-primary/50 hover:bg-accent/50'
+                ? 'border-primary bg-primary/8 scale-[1.01]'
+                : 'border-border hover:border-primary/60 hover:bg-accent/60'
             }
           `}
         >
           <input {...getInputProps()} />
-          <Upload className="mx-auto h-12 w-12 text-muted-foreground mb-4" />
-          <p className="text-lg font-medium mb-2">
-            {isDragActive ? 'Drop PDF here' : 'Drag & drop PDF file here'}
+          <div className={`mx-auto h-9 w-9 rounded-lg flex items-center justify-center mb-3 ${isDragActive ? 'bg-primary text-primary-foreground' : 'bg-muted text-muted-foreground'}`}>
+            <Upload className="h-4 w-4" />
+          </div>
+          <p className="text-sm font-medium mb-0.5">
+            {isDragActive ? 'Drop your PDF here' : 'Upload a PDF'}
           </p>
-          <p className="text-sm text-muted-foreground mb-4">or click to browse</p>
-          <Button type="button" variant="outline" size="sm">
-            Select PDF
-          </Button>
-          <p className="text-xs text-muted-foreground mt-4">
-            Maximum file size: {formatBytes(MAX_FILE_SIZE)}
+          <p className="text-xs text-muted-foreground">
+            Drag & drop or <span className="text-primary font-medium">browse</span> · Max {formatBytes(MAX_FILE_SIZE)}
           </p>
         </div>
       ) : (
-        <div className="border rounded-lg p-6">
-          <div className="flex items-start justify-between mb-4">
-            <div className="flex items-center space-x-3 flex-1">
-              <FileText className="h-8 w-8 text-primary" />
-              <div className="flex-1 min-w-0">
-                <p className="font-medium truncate">{currentFile?.name}</p>
-                <p className="text-sm text-muted-foreground">
-                  {currentFile && formatBytes(currentFile.size)}
-                </p>
-              </div>
+        <div className="border rounded-xl p-4 bg-muted/30">
+          <div className="flex items-center gap-3 mb-3">
+            <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-lg bg-primary/10">
+              <FileText className="h-4 w-4 text-primary" />
             </div>
-            <Button variant="ghost" size="sm" onClick={handleCancel}>
-              <X className="h-4 w-4" />
-            </Button>
+            <div className="flex-1 min-w-0">
+              <p className="text-sm font-medium truncate leading-tight">{currentFile?.name}</p>
+              <p className="text-xs text-muted-foreground leading-tight">
+                {currentFile && formatBytes(currentFile.size)}
+              </p>
+            </div>
+            <button
+              onClick={handleCancel}
+              className="flex h-7 w-7 shrink-0 items-center justify-center rounded-md hover:bg-muted text-muted-foreground hover:text-foreground"
+            >
+              <X className="h-3.5 w-3.5" />
+            </button>
           </div>
 
-          <div className="space-y-2">
-            <div className="flex items-center justify-between text-sm">
-              <span className="text-muted-foreground">Uploading...</span>
-              <span className="font-medium">{uploadProgress}%</span>
+          <div className="space-y-1.5">
+            <div className="flex items-center justify-between text-xs">
+              <span className="text-muted-foreground">Uploading…</span>
+              <span className="font-semibold text-primary">{uploadProgress}%</span>
             </div>
-            <div className="w-full bg-secondary rounded-full h-2 overflow-hidden">
+            <div className="w-full bg-secondary rounded-full h-1.5 overflow-hidden">
               <div
-                className="bg-primary h-full transition-all duration-300 ease-out"
+                className="bg-primary h-full rounded-full transition-all duration-300 ease-out"
                 style={{ width: `${uploadProgress}%` }}
               />
             </div>

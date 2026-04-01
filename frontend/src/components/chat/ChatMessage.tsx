@@ -1,6 +1,6 @@
 'use client'
 
-import { User, Bot } from 'lucide-react'
+import { User, Sparkles } from 'lucide-react'
 import ReactMarkdown from 'react-markdown'
 import type { ChatMessage as ChatMessageType } from '@/types/chat'
 
@@ -13,30 +13,43 @@ export function ChatMessage({ message }: ChatMessageProps) {
 
   return (
     <div
-      className={`flex gap-4 p-4 ${
-        isUser ? 'bg-background' : 'bg-muted/30'
+      className={`flex gap-3 px-4 py-3 ${
+        isUser ? 'justify-end' : 'justify-start'
       }`}
     >
+      {!isUser && (
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary/10 border border-primary/20 mt-0.5">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+        </div>
+      )}
+
       <div
-        className={`flex h-8 w-8 shrink-0 items-center justify-center rounded-full ${
-          isUser ? 'bg-primary' : 'bg-accent'
+        className={`max-w-[80%] rounded-2xl px-4 py-2.5 ${
+          isUser
+            ? 'bg-primary text-primary-foreground rounded-tr-sm shadow-sm'
+            : 'bg-card border border-border rounded-tl-sm shadow-sm'
         }`}
       >
-        {isUser ? (
-          <User className="h-4 w-4 text-primary-foreground" />
-        ) : (
-          <Bot className="h-4 w-4 text-accent-foreground" />
-        )}
-      </div>
-      <div className="flex-1 space-y-2 overflow-hidden">
-        <div className="prose prose-sm max-w-none dark:prose-invert">
+        <div
+          className={`prose prose-sm max-w-none ${
+            isUser
+              ? 'prose-invert text-primary-foreground [&_p]:text-primary-foreground [&_li]:text-primary-foreground [&_strong]:text-primary-foreground'
+              : 'text-foreground'
+          }`}
+        >
           {isUser ? (
-            <p className="whitespace-pre-wrap">{message.content}</p>
+            <p className="whitespace-pre-wrap m-0 leading-relaxed">{message.content}</p>
           ) : (
             <ReactMarkdown>{message.content}</ReactMarkdown>
           )}
         </div>
       </div>
+
+      {isUser && (
+        <div className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full bg-primary mt-0.5">
+          <User className="h-3.5 w-3.5 text-primary-foreground" />
+        </div>
+      )}
     </div>
   )
 }
