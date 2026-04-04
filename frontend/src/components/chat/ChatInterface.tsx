@@ -189,10 +189,17 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-success/10 text-[hsl(var(--success))] border border-[hsl(var(--success)/0.2)]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--success))] inline-block" />
-            Ready
-          </span>
+          {sendMessageMutation.isPending ? (
+            <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20">
+              <Loader2 className="h-3 w-3 animate-spin" />
+              Thinking…
+            </span>
+          ) : (
+            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10px] font-medium bg-success/10 text-[hsl(var(--success))] border border-[hsl(var(--success)/0.2)]">
+              <span className="h-1.5 w-1.5 rounded-full bg-[hsl(var(--success))] inline-block" />
+              Ready
+            </span>
+          )}
         </div>
       </div>
 
