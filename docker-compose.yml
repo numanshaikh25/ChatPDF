@@ -100,7 +100,7 @@ services:
       dockerfile: Dockerfile
     container_name: chatpdf-backend
     ports:
-      - "8000:8000"
+      - "8001:8000"
     environment:
       - DATABASE_URL=postgresql+asyncpg://postgres:postgres@postgres:5432/chatpdf
       - OPENAI_API_KEY=${OPENAI_API_KEY}
@@ -135,9 +135,9 @@ services:
       dockerfile: Dockerfile
     container_name: chatpdf-frontend
     ports:
-      - "3000:3000"
+      - "3001:3000"
     environment:
-      - NEXT_PUBLIC_API_URL=http://localhost:8000
+      - NEXT_PUBLIC_API_URL=http://localhost:8001
       - NEXT_PUBLIC_TUSD_ENDPOINT=http://localhost:8080/files/
     volumes:
       - ./frontend:/app

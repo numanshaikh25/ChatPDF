@@ -17,7 +17,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en" className={inter.variable}>
+    <html lang="en" className={`${inter.variable} dark`}>
       <body className={inter.className}>
         <QueryProvider>
           {children}
@@ -28,10 +28,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               duration: 3500,
               style: {
                 borderRadius: '0.75rem',
-                background: 'hsl(0 0% 100%)',
-                color: 'hsl(224 71% 8%)',
-                border: '1px solid hsl(218 28% 88%)',
-                boxShadow: '0 4px 24px -4px rgba(0,0,0,0.12)',
+                background: 'hsl(224 50% 9%)',
+                color: 'hsl(220 15% 92%)',
+                border: '1px solid hsl(224 28% 18%)',
+                boxShadow: '0 4px 24px -4px rgba(0,0,0,0.48)',
                 fontSize: '0.8125rem',
                 fontWeight: '500',
                 padding: '10px 14px',

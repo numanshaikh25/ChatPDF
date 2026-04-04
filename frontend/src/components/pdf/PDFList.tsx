@@ -20,11 +20,11 @@ const STATUS_CONFIG: Record<StatusKey, {
   spin?: boolean
   badge: string
 }> = {
-  pending:    { icon: Clock,         label: 'Pending',    badge: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20' },
-  uploaded:   { icon: UploadCloud,   label: 'Uploaded',   badge: 'bg-blue-500/10 text-blue-600 border-blue-500/20' },
-  processing: { icon: Loader2,       label: 'Processing', spin: true, badge: 'bg-blue-500/10 text-blue-600 border-blue-500/20' },
-  completed:  { icon: CheckCircle2,  label: 'Ready',      badge: 'bg-green-500/10 text-green-600 border-green-500/20' },
-  failed:     { icon: XCircle,       label: 'Failed',     badge: 'bg-red-500/10 text-red-600 border-red-500/20' },
+  pending:    { icon: Clock,         label: 'Pending',    badge: 'bg-yellow-500/10 text-yellow-600 border-yellow-500/20 dark:bg-yellow-500/15 dark:text-yellow-400 dark:border-yellow-500/25' },
+  uploaded:   { icon: UploadCloud,   label: 'Uploaded',   badge: 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/25' },
+  processing: { icon: Loader2,       label: 'Processing', spin: true, badge: 'bg-blue-500/10 text-blue-600 border-blue-500/20 dark:bg-blue-500/15 dark:text-blue-400 dark:border-blue-500/25' },
+  completed:  { icon: CheckCircle2,  label: 'Ready',      badge: 'bg-green-500/10 text-green-600 border-green-500/20 dark:bg-green-500/15 dark:text-green-400 dark:border-green-500/25' },
+  failed:     { icon: XCircle,       label: 'Failed',     badge: 'bg-red-500/10 text-red-600 border-red-500/20 dark:bg-red-500/15 dark:text-red-400 dark:border-red-500/25' },
 }
 
 function PDFListItem({
