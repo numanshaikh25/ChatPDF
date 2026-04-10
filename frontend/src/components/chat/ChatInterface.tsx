@@ -36,6 +36,7 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
+  const prevPdfIdRef = useRef<string | null>(null)
 
   const { data: pdfStatus } = usePDFStatus(pdfId)
   const { data: chatHistory, isLoading: isLoadingHistory } = useChatHistory(pdfId)
@@ -43,6 +44,17 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
 
   const messages = chatHistory?.messages || []
   const isPdfReady = pdfStatus?.status === 'completed'
+
+  // Cancel any in-flight request when the user switches to a different PDF
+  useEffect(() => {
+    if (prevPdfIdRef.current !== null && prevPdfIdRef.current !== pdfId) {
+      if (sendMessageMutation.isPending) {
+        sendMessageMutation.cancel()
+        toast('Request cancelled — switched document', { icon: '⚡' })
+      }
+    }
+    prevPdfIdRef.current = pdfId
+  }, [pdfId]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToBottom = useCallback((smooth = true) => {
     messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
