@@ -1,7 +1,10 @@
 import logging
+import os
 from contextlib import asynccontextmanager
 
 import inngest.fast_api
+from alembic import command
+from alembic.config import Config
 from app.api.v1.router import api_router
 from app.config import settings
 from app.inngest.client import inngest_client
@@ -17,6 +20,15 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 
+def run_migrations() -> None:
+    """Run Alembic database migrations on startup."""
+    alembic_ini = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "alembic.ini")
+    alembic_cfg = Config(alembic_ini)
+    logger.info("Running database migrations...")
+    command.upgrade(alembic_cfg, "head")
+    logger.info("Database migrations complete.")
+
+
 @asynccontextmanager
 async def lifespan(app: FastAPI):
     """Application lifespan events"""
@@ -25,7 +37,8 @@ async def lifespan(app: FastAPI):
     logger.info(f"Environment: {settings.environment}")
     logger.info(f"Debug mode: {settings.debug}")
 
-    # TODO: Initialize database connection
+    run_migrations()
+
     # TODO: Initialize MinIO client
     # TODO: Initialize Inngest client
 

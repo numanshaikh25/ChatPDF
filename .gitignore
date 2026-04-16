@@ -103,3 +103,4 @@ Thumbs.db
 
 # MinIO data
 minio_data/
+docker-compose.override.yml

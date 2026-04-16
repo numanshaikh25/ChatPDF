@@ -5,6 +5,7 @@ import { FileText, PanelLeftClose, PanelLeftOpen } from 'lucide-react'
 import { PDFUploader } from '@/components/pdf/PDFUploader'
 import { PDFList } from '@/components/pdf/PDFList'
 import { ChatInterface } from '@/components/chat/ChatInterface'
+import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { cn } from '@/lib/utils'
 
 export default function Home() {
@@ -39,13 +40,16 @@ export default function Home() {
                 <p className="text-[10px] text-muted-foreground mt-0.5">AI document assistant</p>
               </div>
             </div>
-            <button
-              onClick={() => setSidebarOpen(false)}
-              className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-              title="Collapse sidebar"
-            >
-              <PanelLeftClose className="h-4 w-4" />
-            </button>
+            <div className="flex items-center gap-1">
+              <ThemeToggle />
+              <button
+                onClick={() => setSidebarOpen(false)}
+                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
+                title="Collapse sidebar"
+              >
+                <PanelLeftClose className="h-4 w-4" />
+              </button>
+            </div>
           </div>
         </div>
 

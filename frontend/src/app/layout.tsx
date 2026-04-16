@@ -2,6 +2,7 @@ import type { Metadata } from 'next'
 import { Inter } from 'next/font/google'
 import { Toaster } from 'react-hot-toast'
 import { QueryProvider } from '@/lib/query-client'
+import { ThemeProvider } from '@/components/theme/ThemeProvider'
 import './globals.css'
 
 const inter = Inter({
@@ -19,6 +20,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en" className={`${inter.variable}`}>
       <body className={inter.className}>
+        <ThemeProvider>
         <QueryProvider>
           {children}
           <Toaster
@@ -45,6 +47,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             }}
           />
         </QueryProvider>
+        </ThemeProvider>
       </body>
     </html>
   )
