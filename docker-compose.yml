@@ -114,7 +114,7 @@ services:
       - MINIO_SECURE=false
       - TUSD_ENDPOINT=http://tusd:8080/files/
       - TUSD_PUBLIC_ENDPOINT=http://localhost:8080/files/
-      - CORS_ORIGINS=http://localhost:3000,http://127.0.0.1:3000
+      - CORS_ORIGINS=["http://localhost:3000","http://127.0.0.1:3000"]
     volumes:
       - ./backend:/app
     depends_on:

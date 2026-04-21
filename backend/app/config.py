@@ -1,3 +1,4 @@
+import json
 from typing import List, Optional
 
 from pydantic import field_validator
@@ -23,6 +24,9 @@ class Settings(BaseSettings):
     @classmethod
     def parse_cors_origins(cls, v: object) -> List[str]:
         if isinstance(v, str):
+            v = v.strip()
+            if v.startswith("["):
+                return json.loads(v)
             return [origin.strip() for origin in v.split(",") if origin.strip()]
         return v  # type: ignore[return-value]
 

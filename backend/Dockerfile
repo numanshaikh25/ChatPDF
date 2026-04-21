@@ -20,14 +20,14 @@ COPY pyproject.toml uv.lock ./
 # Install dependencies only (without project itself)
 # This layer is cached unless dependencies change
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-install-project --no-dev
+    uv sync --no-install-project --no-dev
 
 # Copy application code
 COPY . .
 
 # Sync again to install the project itself
 RUN --mount=type=cache,target=/root/.cache/uv \
-    uv sync --locked --no-dev
+    uv sync --no-dev
 
 # Add virtual environment to PATH
 ENV PATH="/app/.venv/bin:$PATH"
