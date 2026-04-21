@@ -62,7 +62,7 @@ export default function LoginPage() {
 
       <div className="relative w-full max-w-sm animate-slide-up">
         {/* Card */}
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-xl">
+        <div className="rounded-2xl bg-card p-8 shadow-xl">
           {/* Brand */}
           <div className="mb-8 flex flex-col items-center gap-3">
             <div
