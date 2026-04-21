@@ -26,8 +26,9 @@ export function usePDFStatus(pdfId: string | null, enabled = true) {
     queryKey: pdfKeys.status(pdfId || ""),
     queryFn: () => pdfApi.getStatus(pdfId!),
     enabled: enabled && !!pdfId,
-    refetchInterval: (data) => {
+    refetchInterval: (query) => {
       // Poll every 3 seconds if status is pending or processing
+      const data = query.state.data as PDF | undefined
       if (data?.status === "pending" || data?.status === "processing" || data?.status === "uploaded") {
         return 3000;
       }

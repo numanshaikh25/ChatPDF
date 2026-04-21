@@ -9,6 +9,14 @@ import type {
   ChatQueryResponse,
   ChatHistoryResponse
 } from '@/types/chat'
+import type {
+  AuthToken,
+  ChangePasswordRequest,
+  LoginRequest,
+  SignupRequest,
+  UpdateProfileRequest,
+  User,
+} from '@/types/auth'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -18,6 +26,17 @@ export const apiClient = axios.create({
   headers: {
     'Content-Type': 'application/json',
   },
+})
+
+// Attach JWT token to every request if available
+apiClient.interceptors.request.use((config) => {
+  if (typeof window !== 'undefined') {
+    const token = localStorage.getItem('auth_token')
+    if (token) {
+      config.headers.Authorization = `Bearer ${token}`
+    }
+  }
+  return config
 })
 
 // PDF API
@@ -47,8 +66,8 @@ export const pdfApi = {
 
 // Chat API
 export const chatApi = {
-  query: async (request: ChatQueryRequest): Promise<ChatQueryResponse> => {
-    const { data } = await apiClient.post('/chat/query', request)
+  query: async (request: ChatQueryRequest, signal?: AbortSignal): Promise<ChatQueryResponse> => {
+    const { data } = await apiClient.post('/chat/query', request, { signal })
     return data
   },
 
@@ -63,5 +82,32 @@ export const healthApi = {
   check: async (): Promise<{ status: string }> => {
     const { data } = await apiClient.get('/health')
     return data
+  },
+}
+
+// Auth API
+export const authApi = {
+  login: async (request: LoginRequest): Promise<AuthToken> => {
+    const { data } = await apiClient.post('/auth/login', request)
+    return data
+  },
+
+  signup: async (request: SignupRequest): Promise<AuthToken> => {
+    const { data } = await apiClient.post('/auth/register', request)
+    return data
+  },
+
+  getMe: async (): Promise<User> => {
+    const { data } = await apiClient.get('/auth/me')
+    return data
+  },
+
+  updateProfile: async (request: UpdateProfileRequest): Promise<User> => {
+    const { data } = await apiClient.put('/auth/profile', request)
+    return data
+  },
+
+  changePassword: async (request: ChangePasswordRequest): Promise<void> => {
+    await apiClient.put('/auth/password', request)
   },
 }

@@ -1,5 +1,6 @@
 from typing import List, Optional
 
+from pydantic import field_validator
 from pydantic_settings import BaseSettings, SettingsConfigDict
 
 
@@ -11,6 +12,19 @@ class Settings(BaseSettings):
     environment: str = "development"
     debug: bool = True
     log_level: str = "INFO"
+
+    # CORS
+    cors_origins: List[str] = [
+        "http://localhost:3000",
+        "http://127.0.0.1:3000",
+    ]
+
+    @field_validator("cors_origins", mode="before")
+    @classmethod
+    def parse_cors_origins(cls, v: object) -> List[str]:
+        if isinstance(v, str):
+            return [origin.strip() for origin in v.split(",") if origin.strip()]
+        return v  # type: ignore[return-value]
 
     # Database
     database_url: str
@@ -40,6 +54,11 @@ class Settings(BaseSettings):
     tusd_endpoint: str  # Internal Docker URL for webhooks
     tusd_public_endpoint: str  # Public URL for browser uploads
     max_file_size: int = 104857600  # 100MB
+
+    # JWT Auth
+    secret_key: str = "dev-secret-key-please-change-in-production-use-32-chars"
+    algorithm: str = "HS256"
+    access_token_expire_minutes: int = 43200  # 30 days
 
     # RAG Settings
     chunk_size: int = 1000
