@@ -142,7 +142,7 @@ export default function LoginPage() {
               type="submit"
               disabled={submitting}
               className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-60"
-              style={{ background: '#2563EB' }}
+              style={{ background: 'var(--gradient-brand)' }}
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
               {submitting ? 'Signing in…' : 'Sign in'}
