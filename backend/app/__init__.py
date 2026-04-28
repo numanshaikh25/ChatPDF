@@ -1,2 +1,2 @@
-"""ChatPDF Backend Application"""
+"""Onpdf Backend Application"""
 __version__ = "0.1.0"

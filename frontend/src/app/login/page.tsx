@@ -73,7 +73,7 @@ export default function LoginPage() {
             </div>
             <div className="text-center">
               <h1 className="text-xl font-bold tracking-tight">Welcome back</h1>
-              <p className="mt-1 text-sm text-muted-foreground">Sign in to ChatPDF</p>
+              <p className="mt-1 text-sm text-muted-foreground">Sign in to Onpdf</p>
             </div>
           </div>
 

@@ -9,7 +9,7 @@ class Settings(BaseSettings):
     """Application settings loaded from environment variables"""
 
     # Application
-    app_name: str = "ChatPDF"
+    app_name: str = "Onpdf"
     environment: str = "development"
     debug: bool = True
     log_level: str = "INFO"

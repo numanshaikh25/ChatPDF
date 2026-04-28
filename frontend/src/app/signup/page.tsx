@@ -99,7 +99,7 @@ export default function SignupPage() {
             </div>
             <div className="text-center">
               <h1 className="text-xl font-bold tracking-tight">Create account</h1>
-              <p className="mt-1 text-sm text-muted-foreground">Join ChatPDF today</p>
+              <p className="mt-1 text-sm text-muted-foreground">Join Onpdf today</p>
             </div>
           </div>
 
