@@ -23,9 +23,23 @@ export default function SignupPage() {
     }
   }, [isAuthenticated, isLoading, router])
 
+  const handleUsernameChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const sanitized = e.target.value
+      .toLowerCase()
+      .replace(/\s+/g, '_')
+      .replace(/[^a-z0-9_-]/g, '')
+    setUsername(sanitized)
+  }
+
+  const usernameError =
+    username.length > 0 && username.length < 3
+      ? 'Username must be at least 3 characters'
+      : ''
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     if (!email.trim() || !username.trim() || !password) return
+    if (usernameError) return
     setSubmitting(true)
     try {
       await signup({
@@ -118,10 +132,21 @@ export default function SignupPage() {
                 autoComplete="username"
                 required
                 value={username}
-                onChange={(e) => setUsername(e.target.value)}
+                onChange={handleUsernameChange}
                 placeholder="janedoe"
-                className="w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className={`w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 ${
+                  usernameError
+                    ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
+                    : 'border-input focus:border-primary focus:ring-primary/20'
+                }`}
               />
+              {usernameError ? (
+                <p className="text-xs text-destructive">{usernameError}</p>
+              ) : (
+                <p className="text-xs text-muted-foreground">
+                  Letters, numbers, underscores, and dashes only
+                </p>
+              )}
             </div>
 
             {/* Email */}
