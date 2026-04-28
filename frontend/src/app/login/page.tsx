@@ -14,6 +14,7 @@ export default function LoginPage() {
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
   const [submitting, setSubmitting] = useState(false)
+  const [loginFailed, setLoginFailed] = useState(false)
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
@@ -27,12 +28,14 @@ export default function LoginPage() {
     setSubmitting(true)
     try {
       await login({ email: email.trim(), password })
+      setLoginFailed(false)
       router.push('/')
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||
         'Login failed. Please check your credentials.'
       toast.error(msg)
+      setLoginFailed(true)
     } finally {
       setSubmitting(false)
     }
@@ -122,6 +125,17 @@ export default function LoginPage() {
                 </button>
               </div>
             </div>
+
+            {loginFailed && (
+              <div className="flex justify-end">
+                <Link
+                  href="/forgot-password"
+                  className="text-sm font-medium text-primary hover:underline"
+                >
+                  Forgot password?
+                </Link>
+              </div>
+            )}
 
             {/* Submit */}
             <button

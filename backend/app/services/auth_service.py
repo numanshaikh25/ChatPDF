@@ -1,3 +1,4 @@
+import secrets
 import uuid
 from datetime import datetime, timedelta, timezone
 from typing import Optional
@@ -76,3 +77,35 @@ async def authenticate_user(db: AsyncSession, email: str, password: str) -> Opti
     if not user or not verify_password(password, user.hashed_password):
         return None
     return user
+
+
+async def create_password_reset_token(db: AsyncSession, email: str) -> Optional[str]:
+    user = await get_user_by_email(db, email)
+    if not user or not user.is_active:
+        return None
+    token = secrets.token_urlsafe(32)
+    user.password_reset_token = token
+    user.password_reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)
+    db.add(user)
+    await db.flush()
+    return token
+
+
+async def reset_password_with_token(db: AsyncSession, token: str, new_password: str) -> bool:
+    result = await db.execute(select(User).where(User.password_reset_token == token))
+    user = result.scalar_one_or_none()
+    if not user:
+        return False
+    if user.password_reset_expires is None:
+        return False
+    expires = user.password_reset_expires
+    if expires.tzinfo is None:
+        expires = expires.replace(tzinfo=timezone.utc)
+    if expires < datetime.now(timezone.utc):
+        return False
+    user.hashed_password = hash_password(new_password)
+    user.password_reset_token = None
+    user.password_reset_expires = None
+    db.add(user)
+    await db.flush()
+    return True

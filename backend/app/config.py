@@ -64,6 +64,17 @@ class Settings(BaseSettings):
     algorithm: str = "HS256"
     access_token_expire_minutes: int = 43200  # 30 days
 
+    # SMTP Email (optional — if not set, reset links are logged to console)
+    smtp_host: Optional[str] = None
+    smtp_port: int = 587
+    smtp_username: Optional[str] = None
+    smtp_password: Optional[str] = None
+    smtp_from_email: str = "noreply@onpdf.com"
+    smtp_tls: bool = True
+
+    # Public app URL used in reset links
+    app_url: str = "http://localhost:3000"
+
     # RAG Settings
     chunk_size: int = 1000
     chunk_overlap: int = 200

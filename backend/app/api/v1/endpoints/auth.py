@@ -5,14 +5,17 @@ from app.api.v1.deps import get_current_user
 from app.db.models.user import User
 from app.db.session import get_db
 from app.schemas.auth import (
+    ForgotPasswordRequest,
+    MessageResponse,
     PasswordChange,
+    ResetPasswordRequest,
     Token,
     UserCreate,
     UserLogin,
     UserResponse,
     UserUpdate,
 )
-from app.services import auth_service
+from app.services import auth_service, email_service
 
 router = APIRouter()
 
@@ -96,6 +99,29 @@ async def update_profile(
     await db.flush()
     await db.refresh(current_user)
     return current_user
+
+
+@router.post("/forgot-password", response_model=MessageResponse)
+async def forgot_password(request: ForgotPasswordRequest, db: AsyncSession = Depends(get_db)):
+    """Request a password reset link (always returns 200 to avoid email enumeration)"""
+    token = await auth_service.create_password_reset_token(db, request.email)
+    if token:
+        await email_service.send_password_reset_email(request.email, token)
+    return MessageResponse(
+        message="If an account with that email exists, you will receive a password reset link shortly."
+    )
+
+
+@router.post("/reset-password", response_model=MessageResponse)
+async def reset_password(request: ResetPasswordRequest, db: AsyncSession = Depends(get_db)):
+    """Reset password using a valid reset token"""
+    success = await auth_service.reset_password_with_token(db, request.token, request.new_password)
+    if not success:
+        raise HTTPException(
+            status_code=status.HTTP_400_BAD_REQUEST,
+            detail="Invalid or expired reset token. Please request a new one.",
+        )
+    return MessageResponse(message="Password reset successfully. You can now sign in.")
 
 
 @router.put("/password")
