@@ -38,12 +38,13 @@ export default function SignupPage() {
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string | { msg: string }[] } } })
         ?.response?.data?.detail
-      const msg =
+      const rawMsg =
         typeof detail === 'string'
           ? detail
           : Array.isArray(detail)
           ? detail[0]?.msg ?? 'Signup failed'
           : 'Signup failed. Please try again.'
+      const msg = rawMsg.startsWith('Value error, ') ? rawMsg.slice('Value error, '.length) : rawMsg
       toast.error(msg)
     } finally {
       setSubmitting(false)
