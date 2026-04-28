@@ -19,7 +19,7 @@ export default function SignupPage() {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace('/')
+      router.replace('/dashboard')
     }
   }, [isAuthenticated, isLoading, router])
 
@@ -48,7 +48,7 @@ export default function SignupPage() {
         full_name: fullName.trim() || undefined,
         password,
       })
-      router.push('/')
+      router.push('/dashboard')
     } catch (err: unknown) {
       const detail = (err as { response?: { data?: { detail?: string | { msg: string }[] } } })
         ?.response?.data?.detail

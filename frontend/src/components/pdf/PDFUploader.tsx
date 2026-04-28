@@ -11,6 +11,7 @@ import { cn } from '@/lib/utils'
 import type * as tus from 'tus-js-client'
 
 const MAX_FILE_SIZE = parseInt(process.env.NEXT_PUBLIC_MAX_FILE_SIZE || '104857600')
+const TUSD_ENDPOINT = process.env.NEXT_PUBLIC_TUSD_ENDPOINT
 
 export function PDFUploader({ onUploadComplete }: { onUploadComplete?: (pdfId: string) => void }) {
   const [uploadProgress, setUploadProgress] = useState<number>(0)
@@ -36,7 +37,8 @@ export function PDFUploader({ onUploadComplete }: { onUploadComplete?: (pdfId: s
         toast.dismiss()
         toast.success('Upload initialized')
 
-        const upload = uploadWithTusd(file, initResponse.tusd_upload_url, initResponse.pdf_id, {
+        const tusdUrl = TUSD_ENDPOINT || initResponse.tusd_upload_url
+        const upload = uploadWithTusd(file, tusdUrl, initResponse.pdf_id, {
           onProgress: (bytesUploaded, bytesTotal) => {
             setUploadProgress(Math.round((bytesUploaded / bytesTotal) * 100))
           },

@@ -18,7 +18,7 @@ export default function LoginPage() {
 
   useEffect(() => {
     if (!isLoading && isAuthenticated) {
-      router.replace('/')
+      router.replace('/dashboard')
     }
   }, [isAuthenticated, isLoading, router])
 
@@ -29,7 +29,7 @@ export default function LoginPage() {
     try {
       await login({ email: email.trim(), password })
       setLoginFailed(false)
-      router.push('/')
+      router.push('/dashboard')
     } catch (err: unknown) {
       const msg =
         (err as { response?: { data?: { detail?: string } } })?.response?.data?.detail ||

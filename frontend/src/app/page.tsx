@@ -1,174 +1,251 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
-import { FileText, Loader2, LogOut, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react'
-import { PDFUploader } from '@/components/pdf/PDFUploader'
-import { PDFList } from '@/components/pdf/PDFList'
-import { ChatInterface } from '@/components/chat/ChatInterface'
+import { FileText, ImageIcon, MessageSquare, ArrowRight, Zap, Shield, Sparkles } from 'lucide-react'
 import { useAuth } from '@/contexts/AuthContext'
-import { cn } from '@/lib/utils'
 
-export default function Home() {
+export default function LandingPage() {
   const router = useRouter()
-  const { user, isLoading, isAuthenticated, logout } = useAuth()
-  const [selectedPdfId, setSelectedPdfId] = useState<string | null>(null)
-  const [sidebarOpen, setSidebarOpen] = useState(true)
+  const { isAuthenticated, isLoading } = useAuth()
 
   useEffect(() => {
-    if (!isLoading && !isAuthenticated) {
-      router.replace('/login')
+    if (!isLoading && isAuthenticated) {
+      router.replace('/dashboard')
     }
-  }, [isLoading, isAuthenticated, router])
-
-  const handleUploadComplete = (pdfId: string) => {
-    setSelectedPdfId(pdfId)
-  }
-
-  const handleLogout = () => {
-    logout()
-    router.push('/login')
-  }
-
-  if (isLoading || !isAuthenticated) {
-    return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
-      </div>
-    )
-  }
-
-  const initials = user?.full_name
-    ? user.full_name
-        .split(' ')
-        .map((n) => n[0])
-        .join('')
-        .toUpperCase()
-        .slice(0, 2)
-    : user?.username?.slice(0, 2).toUpperCase() ?? '??'
+  }, [isAuthenticated, isLoading, router])
 
   return (
-    <div className="flex h-screen bg-background overflow-hidden">
-      {/* ── Sidebar ────────────────────────────────────────── */}
-      <aside
-        className={cn(
-          'flex flex-col bg-[hsl(var(--sidebar-bg))] border-r border-[hsl(var(--sidebar-border))] transition-all duration-300 ease-in-out shrink-0 overflow-hidden',
-          sidebarOpen ? 'w-72' : 'w-0'
-        )}
-      >
-        {/* Brand header */}
-        <div className="px-4 py-4 border-b border-[hsl(var(--sidebar-border))] shrink-0">
-          <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2.5">
-              <div
-                className="flex h-8 w-8 items-center justify-center rounded-xl shadow-sm"
-                style={{ background: 'var(--gradient-brand)' }}
-              >
-                <FileText className="h-4 w-4 text-white" />
-              </div>
-              <div>
-                <h1 className="text-sm font-bold tracking-tight leading-none">Onpdf</h1>
-                <p className="text-[10px] text-muted-foreground mt-0.5">AI document assistant</p>
-              </div>
-            </div>
-            <div className="flex items-center gap-1">
-              <button
-                onClick={() => setSidebarOpen(false)}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-                title="Collapse sidebar"
-              >
-                <PanelLeftClose className="h-4 w-4" />
-              </button>
-            </div>
+    <div className="min-h-screen bg-background overflow-x-hidden">
+      {/* Background gradient blobs */}
+      <div className="pointer-events-none fixed inset-0 overflow-hidden">
+        <div
+          className="absolute -top-60 -right-60 h-[600px] w-[600px] rounded-full opacity-10 blur-3xl"
+          style={{ background: 'var(--gradient-brand)' }}
+        />
+        <div
+          className="absolute top-1/2 -left-60 h-[500px] w-[500px] rounded-full opacity-[0.06] blur-3xl"
+          style={{ background: 'var(--gradient-brand)' }}
+        />
+        <div
+          className="absolute -bottom-60 right-1/3 h-[400px] w-[400px] rounded-full opacity-[0.07] blur-3xl"
+          style={{ background: 'var(--gradient-brand)' }}
+        />
+      </div>
+
+      {/* ── Navbar ──────────────────────────────────────────── */}
+      <header className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
+        <div className="flex items-center gap-2.5">
+          <div
+            className="flex h-9 w-9 items-center justify-center rounded-xl shadow-md"
+            style={{ background: 'var(--gradient-brand)' }}
+          >
+            <FileText className="h-5 w-5 text-white" />
           </div>
+          <span className="text-lg font-bold tracking-tight">Onpdf</span>
         </div>
 
-        {/* Upload section */}
-        <div className="px-3 pt-3 pb-2 shrink-0 border-b border-[hsl(var(--sidebar-border))]">
-          <PDFUploader onUploadComplete={handleUploadComplete} />
+        <nav className="flex items-center gap-3">
+          <Link
+            href="/login"
+            className="rounded-xl px-4 py-2 text-sm font-semibold text-foreground border border-border hover:bg-muted transition-colors"
+          >
+            Sign in
+          </Link>
+          <Link
+            href="/signup"
+            className="rounded-xl px-4 py-2 text-sm font-semibold text-white shadow-sm transition-opacity hover:opacity-90"
+            style={{ background: 'var(--gradient-brand)' }}
+          >
+            Get started
+          </Link>
+        </nav>
+      </header>
+
+      {/* ── Hero ────────────────────────────────────────────── */}
+      <section className="relative z-10 mx-auto max-w-4xl px-6 pt-20 pb-24 text-center animate-slide-up">
+        {/* Badge */}
+        <div className="inline-flex items-center gap-2 rounded-full border border-border bg-card px-3.5 py-1.5 text-xs font-semibold text-muted-foreground shadow-sm mb-8">
+          <Sparkles className="h-3.5 w-3.5 text-primary" />
+          AI-powered document & image analysis
         </div>
 
-        {/* Documents header */}
-        <div className="px-4 pt-3 pb-1 shrink-0">
-          <p className="text-[10px] font-semibold uppercase tracking-widest text-muted-foreground/70">
-            Documents
-          </p>
-        </div>
+        <h1 className="text-5xl font-extrabold tracking-tight leading-[1.1] sm:text-6xl">
+          Chat with your{' '}
+          <span className="text-gradient-brand">documents</span>{' '}
+          &{' '}
+          <span className="text-gradient-brand">images</span>
+        </h1>
 
-        {/* PDF list — scrollable */}
-        <div className="flex-1 overflow-y-auto pb-3">
-          <PDFList
-            selectedPdfId={selectedPdfId}
-            onSelect={setSelectedPdfId}
-          />
-        </div>
+        <p className="mt-6 text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+          Upload a PDF or an image and start asking questions instantly. Onpdf reads your files
+          and gives you accurate, AI-powered answers — no copy-pasting required.
+        </p>
 
-        {/* ── User footer ── */}
-        <div className="shrink-0 border-t border-[hsl(var(--sidebar-border))] px-3 py-3">
-          <div className="flex items-center gap-2.5">
-            {/* Avatar */}
-            {user?.avatar_url ? (
-              <img
-                src={user.avatar_url}
-                alt={user.username}
-                className="h-8 w-8 rounded-lg object-cover ring-1 ring-border"
-              />
-            ) : (
-              <div
-                className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg text-xs font-bold text-white"
-                style={{ background: 'var(--gradient-brand)' }}
-              >
-                {initials}
-              </div>
-            )}
-            {/* Name */}
-            <div className="min-w-0 flex-1">
-              <p className="truncate text-xs font-semibold leading-none">
-                {user?.full_name || user?.username}
-              </p>
-              <p className="truncate text-[10px] text-muted-foreground mt-0.5">
-                @{user?.username}
-              </p>
-            </div>
-            {/* Actions */}
-            <div className="flex items-center gap-0.5">
-              <Link
-                href="/settings"
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-                title="Settings"
-              >
-                <Settings className="h-3.5 w-3.5" />
-              </Link>
-              <button
-                onClick={handleLogout}
-                className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
-                title="Sign out"
-              >
-                <LogOut className="h-3.5 w-3.5" />
-              </button>
-            </div>
-          </div>
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
+          <Link
+            href="/signup"
+            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white shadow-md transition-opacity hover:opacity-90"
+            style={{ background: 'var(--gradient-brand)' }}
+          >
+            Start for free
+            <ArrowRight className="h-4 w-4" />
+          </Link>
+          <Link
+            href="/login"
+            className="inline-flex items-center gap-2 rounded-xl border border-border bg-card px-6 py-3 text-base font-semibold text-foreground shadow-sm hover:bg-muted transition-colors"
+          >
+            Sign in
+          </Link>
         </div>
-      </aside>
+      </section>
 
-      {/* ── Main content ───────────────────────────────────── */}
-      <main className="flex-1 flex flex-col min-w-0 relative">
-        {/* Collapsed sidebar toggle */}
-        {!sidebarOpen && (
-          <div className="absolute top-3 left-3 z-10 flex items-center gap-1 animate-fade-in">
-            <button
-              onClick={() => setSidebarOpen(true)}
-              className="flex h-8 w-8 items-center justify-center rounded-lg bg-card border border-border shadow-sm text-muted-foreground hover:text-foreground hover:bg-accent"
-              title="Open sidebar"
+      {/* ── Feature cards ───────────────────────────────────── */}
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24">
+        <div className="grid gap-5 sm:grid-cols-3">
+          {/* Card 1 */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+              style={{ background: 'var(--gradient-surface)' }}
             >
-              <PanelLeftOpen className="h-4 w-4" />
-            </button>
+              <FileText className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="text-base font-semibold mb-2">Upload PDFs</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Drop any PDF — research papers, contracts, reports — and ask anything.
+              Get precise answers extracted directly from the document.
+            </p>
           </div>
-        )}
 
-        <ChatInterface pdfId={selectedPdfId} sidebarOpen={sidebarOpen} />
-      </main>
+          {/* Card 2 */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+              style={{ background: 'var(--gradient-surface)' }}
+            >
+              <ImageIcon className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="text-base font-semibold mb-2">Analyze images</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Upload PNG or JPG files and let AI describe, summarize, and answer
+              questions about what's in your images.
+            </p>
+          </div>
+
+          {/* Card 3 */}
+          <div className="rounded-2xl border border-border bg-card p-6 shadow-sm hover:shadow-md transition-shadow">
+            <div
+              className="mb-4 flex h-11 w-11 items-center justify-center rounded-xl"
+              style={{ background: 'var(--gradient-surface)' }}
+            >
+              <MessageSquare className="h-5 w-5 text-primary" />
+            </div>
+            <h3 className="text-base font-semibold mb-2">Conversational AI</h3>
+            <p className="text-sm text-muted-foreground leading-relaxed">
+              Ask follow-up questions naturally. Onpdf remembers the context of your
+              document so every answer stays relevant.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Why Onpdf ───────────────────────────────────────── */}
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24">
+        <div
+          className="rounded-3xl p-px"
+          style={{ background: 'var(--gradient-brand)' }}
+        >
+          <div className="rounded-[calc(1.5rem-1px)] bg-card px-8 py-10">
+            <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
+              Why Onpdf?
+            </h2>
+            <div className="grid gap-8 sm:grid-cols-3 text-center">
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-sm"
+                  style={{ background: 'var(--gradient-surface)' }}
+                >
+                  <Zap className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold">Instant answers</h4>
+                <p className="text-sm text-muted-foreground">
+                  No reading through pages. Ask and get the answer in seconds.
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-sm"
+                  style={{ background: 'var(--gradient-surface)' }}
+                >
+                  <Shield className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold">Private & secure</h4>
+                <p className="text-sm text-muted-foreground">
+                  Your files are tied to your account only — never shared with others.
+                </p>
+              </div>
+              <div className="flex flex-col items-center gap-3">
+                <div
+                  className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-sm"
+                  style={{ background: 'var(--gradient-surface)' }}
+                >
+                  <Sparkles className="h-5 w-5 text-primary" />
+                </div>
+                <h4 className="font-semibold">Multi-modal AI</h4>
+                <p className="text-sm text-muted-foreground">
+                  Works with both documents and images using the latest AI models.
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── CTA banner ──────────────────────────────────────── */}
+      <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24 text-center">
+        <h2 className="text-3xl font-extrabold tracking-tight mb-4">
+          Ready to get started?
+        </h2>
+        <p className="text-muted-foreground mb-8 text-base max-w-md mx-auto">
+          Create your free account and upload your first document in under a minute.
+        </p>
+        <Link
+          href="/signup"
+          className="inline-flex items-center gap-2 rounded-xl px-7 py-3.5 text-base font-semibold text-white shadow-md transition-opacity hover:opacity-90"
+          style={{ background: 'var(--gradient-brand)' }}
+        >
+          Create free account
+          <ArrowRight className="h-4 w-4" />
+        </Link>
+      </section>
+
+      {/* ── Footer ──────────────────────────────────────────── */}
+      <footer className="relative z-10 border-t border-border px-6 py-8">
+        <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
+          <div className="flex items-center gap-2">
+            <div
+              className="flex h-6 w-6 items-center justify-center rounded-lg"
+              style={{ background: 'var(--gradient-brand)' }}
+            >
+              <FileText className="h-3.5 w-3.5 text-white" />
+            </div>
+            <span className="text-sm font-semibold">Onpdf</span>
+          </div>
+          <p className="text-xs text-muted-foreground">
+            &copy; {new Date().getFullYear()} Onpdf. All rights reserved.
+          </p>
+          <div className="flex items-center gap-4 text-xs text-muted-foreground">
+            <Link href="/login" className="hover:text-foreground transition-colors">
+              Sign in
+            </Link>
+            <Link href="/signup" className="hover:text-foreground transition-colors">
+              Sign up
+            </Link>
+          </div>
+        </div>
+      </footer>
     </div>
   )
 }

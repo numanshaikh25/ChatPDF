@@ -8,9 +8,10 @@ interface ChatInputProps {
   onSend: (message: string) => void
   disabled?: boolean
   isLoading?: boolean
+  placeholder?: string
 }
 
-export function ChatInput({ onSend, disabled, isLoading }: ChatInputProps) {
+export function ChatInput({ onSend, disabled, isLoading, placeholder }: ChatInputProps) {
   const [message, setMessage] = useState('')
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
@@ -59,7 +60,7 @@ export function ChatInput({ onSend, disabled, isLoading }: ChatInputProps) {
         placeholder={
           isDisabled && !isLoading
             ? 'Select a ready document to start chatting…'
-            : 'Ask anything about this document…'
+            : (placeholder ?? 'Ask anything about this document…')
         }
         disabled={isDisabled}
         rows={1}

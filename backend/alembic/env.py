@@ -8,7 +8,7 @@ import sys
 sys.path.insert(0, os.path.dirname(os.path.dirname(__file__)))
 
 from app.db.base import Base
-from app.db.models import PDF, PDFChunk, ChatMessage, User  # noqa: F401
+from app.db.models import PDF, PDFChunk, ChatMessage, User, Image, ImageMessage  # noqa: F401
 from app.config import settings
 
 # this is the Alembic Config object

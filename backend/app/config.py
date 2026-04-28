@@ -36,7 +36,7 @@ class Settings(BaseSettings):
 
     # OpenAI
     openai_api_key: str
-    openai_model: str = "gpt-5-mini"
+    openai_model: str = "gpt-4o-mini"
     openai_embedding_model: str = "text-embedding-3-small"
     openai_temperature: float = 1.0
     openai_max_tokens: int = 1000

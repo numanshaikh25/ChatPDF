@@ -2,18 +2,24 @@
 
 import { useEffect, useRef, useState, useCallback } from 'react'
 import {
-  Loader2, MessageSquare, Sparkles, FileText,
+  Loader2, MessageSquare, Sparkles, FileText, ImageIcon,
   AlertCircle, ChevronDown, Zap,
 } from 'lucide-react'
 import { ChatMessage } from './ChatMessage'
 import { ChatInput } from './ChatInput'
 import { useChatHistory, useSendMessage } from '@/hooks/useChat'
 import { usePDFStatus } from '@/hooks/usePDF'
+import { useImageChatHistory, useImageDetail, useSendImageMessage } from '@/hooks/useImage'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 
+export interface ActiveDocument {
+  id: string
+  type: 'pdf' | 'image'
+}
+
 interface ChatInterfaceProps {
-  pdfId: string | null
+  activeDoc: ActiveDocument | null
   sidebarOpen?: boolean
 }
 
@@ -24,6 +30,13 @@ const SUGGESTION_PROMPTS = [
   'Explain the conclusion',
 ]
 
+const IMAGE_SUGGESTION_PROMPTS = [
+  'Describe what you see in this image',
+  'What text is visible in this image?',
+  'What are the main colors and elements?',
+  'Analyze the content of this image',
+]
+
 const PROCESSING_STEPS: Record<string, { label: string; step: number }> = {
   pending:    { label: 'Queued for processing…',            step: 1 },
   uploaded:   { label: 'Upload complete — preparing…',      step: 2 },
@@ -32,29 +45,55 @@ const PROCESSING_STEPS: Record<string, { label: string; step: number }> = {
   failed:     { label: 'Processing failed.',                step: 0 },
 }
 
-export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
+export function ChatInterface({ activeDoc, sidebarOpen }: ChatInterfaceProps) {
   const messagesEndRef = useRef<HTMLDivElement>(null)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
   const [showScrollBtn, setShowScrollBtn] = useState(false)
-  const prevPdfIdRef = useRef<string | null>(null)
+  const prevDocRef = useRef<ActiveDocument | null>(null)
 
-  const { data: pdfStatus } = usePDFStatus(pdfId)
-  const { data: chatHistory, isLoading: isLoadingHistory } = useChatHistory(pdfId)
-  const sendMessageMutation = useSendMessage()
+  const isPdf = activeDoc?.type === 'pdf'
+  const isImage = activeDoc?.type === 'image'
+  const docId = activeDoc?.id ?? null
 
-  const messages = chatHistory?.messages || []
-  const isPdfReady = pdfStatus?.status === 'completed'
+  // PDF hooks (enabled only for PDF docs)
+  const { data: pdfStatus } = usePDFStatus(isPdf ? docId : null)
+  const { data: pdfHistory, isLoading: isPdfHistoryLoading } = useChatHistory(isPdf ? docId : null)
+  const pdfMutation = useSendMessage()
 
-  // Cancel any in-flight request when the user switches to a different PDF
+  // Image hooks (enabled only for image docs)
+  const { data: imageDetail } = useImageDetail(isImage ? docId : null)
+  const { data: imageHistory, isLoading: isImageHistoryLoading } = useImageChatHistory(isImage ? docId : null)
+  const imageMutation = useSendImageMessage()
+
+  // Unified state
+  type Message = { role: 'user' | 'assistant'; content: string }
+  const docStatus = isPdf ? pdfStatus : imageDetail
+  const isReady = isPdf
+    ? pdfStatus?.status === 'completed'
+    : imageDetail?.status === 'ready'
+  const isLoadingHistory = isPdf ? isPdfHistoryLoading : isImageHistoryLoading
+  const messages: Message[] = isPdf
+    ? (pdfHistory?.messages ?? [])
+    : (imageHistory?.messages ?? [])
+  const isMutationPending = isPdf ? pdfMutation.isPending : imageMutation.isPending
+
+  const suggestions = isImage ? IMAGE_SUGGESTION_PROMPTS : SUGGESTION_PROMPTS
+
+  // Cancel in-flight request when switching documents
   useEffect(() => {
-    if (prevPdfIdRef.current !== null && prevPdfIdRef.current !== pdfId) {
-      if (sendMessageMutation.isPending) {
-        sendMessageMutation.cancel()
+    const prev = prevDocRef.current
+    const docChanged = prev?.id !== activeDoc?.id || prev?.type !== activeDoc?.type
+    if (prev !== null && docChanged) {
+      if (pdfMutation.isPending) {
+        pdfMutation.cancel()
         toast('Request cancelled — switched document', { icon: '⚡' })
       }
+      if (imageMutation.isPending) {
+        imageMutation.cancel()
+      }
     }
-    prevPdfIdRef.current = pdfId
-  }, [pdfId]) // eslint-disable-line react-hooks/exhaustive-deps
+    prevDocRef.current = activeDoc
+  }, [activeDoc]) // eslint-disable-line react-hooks/exhaustive-deps
 
   const scrollToBottom = useCallback((smooth = true) => {
     messagesEndRef.current?.scrollIntoView({ behavior: smooth ? 'smooth' : 'auto' })
@@ -72,23 +111,30 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
   }
 
   const handleSend = async (message: string) => {
-    if (!pdfId || !isPdfReady) return
+    if (!docId || !isReady) return
     try {
-      await sendMessageMutation.mutateAsync({
-        pdf_id: pdfId,
-        message,
-        chat_history: messages,
-      })
+      if (isPdf) {
+        await pdfMutation.mutateAsync({
+          pdf_id: docId,
+          message,
+          chat_history: messages as { role: 'user' | 'assistant'; content: string }[],
+        })
+      } else {
+        await imageMutation.mutateAsync({
+          image_id: docId,
+          message,
+          chat_history: messages as { role: 'user' | 'assistant'; content: string }[],
+        })
+      }
     } catch (error: any) {
-      toast.error(`Failed to send message: ${error.message}`)
+      toast.error(`Failed to send message: ${error.response?.data?.detail || error.message}`)
     }
   }
 
-  /* ── Empty / no PDF selected ─────────────────────── */
-  if (!pdfId) {
+  /* ── Empty / no document selected ─────────────────── */
+  if (!activeDoc) {
     return (
       <div className="flex flex-col items-center justify-center h-full gap-6 px-8 animate-fade-in">
-        {/* Icon */}
         <div className="relative">
           <div
             className="flex h-20 w-20 items-center justify-center rounded-3xl shadow-lg"
@@ -101,15 +147,13 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
           </span>
         </div>
 
-        {/* Text */}
         <div className="text-center max-w-sm">
-          <h2 className="text-xl font-bold mb-1">Chat with your PDFs</h2>
+          <h2 className="text-xl font-bold mb-1">Chat with your documents</h2>
           <p className="text-sm text-muted-foreground leading-relaxed">
-            Upload a PDF or select one from the sidebar, then start asking questions about it.
+            Upload a PDF or image, then start asking questions about it.
           </p>
         </div>
 
-        {/* Suggestion chips */}
         <div className="flex flex-wrap gap-2 justify-center max-w-md">
           {SUGGESTION_PROMPTS.map((hint) => (
             <span
@@ -124,15 +168,14 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
     )
   }
 
-  /* ── Processing / error state ────────────────────── */
-  if (pdfStatus && !isPdfReady) {
+  /* ── PDF processing / error state ────────────────── */
+  if (isPdf && pdfStatus && !isReady) {
     const isFailed = pdfStatus.status === 'failed'
     const info = PROCESSING_STEPS[pdfStatus.status] ?? PROCESSING_STEPS.pending
     const totalSteps = 3
 
     return (
       <div className="flex flex-col items-center justify-center h-full gap-5 px-8 animate-fade-in">
-        {/* Icon */}
         <div
           className={cn(
             'flex h-16 w-16 items-center justify-center rounded-2xl shadow-sm',
@@ -145,7 +188,6 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
           }
         </div>
 
-        {/* Label */}
         <div className="text-center">
           <p className="font-semibold text-base">
             {isFailed ? 'Processing Failed' : 'Processing Document'}
@@ -156,7 +198,6 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
           )}
         </div>
 
-        {/* Step progress bar */}
         {!isFailed && (
           <div className="w-56 space-y-1.5">
             <div className="flex justify-between text-[11px] text-muted-foreground">
@@ -179,6 +220,8 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
   }
 
   /* ── Chat view ───────────────────────────────────── */
+  const DocIcon = isImage ? ImageIcon : FileText
+
   return (
     <div className="relative flex flex-col h-full">
 
@@ -191,17 +234,17 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
           className="flex h-8 w-8 shrink-0 items-center justify-center rounded-lg shadow-sm"
           style={{ background: 'var(--gradient-brand)' }}
         >
-          <FileText className="h-4 w-4 text-white" />
+          <DocIcon className="h-4 w-4 text-white" />
         </div>
         <div className="min-w-0 flex-1">
-          <h2 className="font-semibold text-sm truncate leading-tight">{pdfStatus?.filename}</h2>
+          <h2 className="font-semibold text-sm truncate leading-tight">{docStatus?.filename}</h2>
           <p className="text-xs text-muted-foreground leading-tight">
-            {pdfStatus?.total_pages != null ? `${pdfStatus.total_pages} pages · ` : ''}
-            Ask anything about this document
+            {isPdf && (pdfStatus?.total_pages != null) ? `${pdfStatus.total_pages} pages · ` : ''}
+            {isImage ? 'Image · Ask anything about this image' : 'Ask anything about this document'}
           </p>
         </div>
         <div className="flex items-center gap-1.5 shrink-0">
-          {sendMessageMutation.isPending ? (
+          {isMutationPending ? (
             <span className="inline-flex items-center gap-1.5 px-2 py-0.5 rounded-full text-[10px] font-medium bg-primary/10 text-primary border border-primary/20">
               <Loader2 className="h-3 w-3 animate-spin" />
               Thinking…
@@ -235,10 +278,12 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
             </div>
             <div className="text-center">
               <p className="font-semibold">Start a Conversation</p>
-              <p className="text-sm text-muted-foreground mt-1">Ask any question about your document</p>
+              <p className="text-sm text-muted-foreground mt-1">
+                {isImage ? 'Ask any question about this image' : 'Ask any question about your document'}
+              </p>
             </div>
             <div className="flex flex-wrap gap-2 justify-center max-w-sm mt-1">
-              {SUGGESTION_PROMPTS.map((hint) => (
+              {suggestions.map((hint) => (
                 <button
                   key={hint}
                   onClick={() => handleSend(hint)}
@@ -256,7 +301,7 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
             ))}
 
             {/* Typing indicator */}
-            {sendMessageMutation.isPending && (
+            {isMutationPending && (
               <div className="flex gap-3 px-4 py-2 justify-start animate-slide-up">
                 <div
                   className="flex h-7 w-7 shrink-0 items-center justify-center rounded-full shadow-sm mt-0.5"
@@ -292,8 +337,13 @@ export function ChatInterface({ pdfId, sidebarOpen }: ChatInterfaceProps) {
       <div className="shrink-0 border-t px-4 pt-3 pb-4 glass">
         <ChatInput
           onSend={handleSend}
-          disabled={!isPdfReady}
-          isLoading={sendMessageMutation.isPending}
+          disabled={!isReady}
+          isLoading={isMutationPending}
+          placeholder={
+            isImage
+              ? 'Ask anything about this image…'
+              : undefined
+          }
         />
         <p className="text-[11px] text-muted-foreground/50 text-center mt-2 select-none">
           Enter to send · Shift+Enter for new line

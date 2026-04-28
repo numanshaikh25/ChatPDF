@@ -17,6 +17,13 @@ import type {
   UpdateProfileRequest,
   User,
 } from '@/types/auth'
+import type {
+  Image,
+  ImageListResponse,
+  ImageChatRequest,
+  ImageChatResponse,
+  ImageChatHistoryResponse,
+} from '@/types/image'
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
 
@@ -73,6 +80,42 @@ export const chatApi = {
 
   getHistory: async (pdfId: string): Promise<ChatHistoryResponse> => {
     const { data } = await apiClient.get(`/chat/history/${pdfId}`)
+    return data
+  },
+}
+
+// Image API
+export const imageApi = {
+  upload: async (file: File): Promise<Image> => {
+    const formData = new FormData()
+    formData.append('file', file)
+    const { data } = await apiClient.post('/image/upload', formData, {
+      headers: { 'Content-Type': 'multipart/form-data' },
+    })
+    return data
+  },
+
+  list: async (): Promise<ImageListResponse> => {
+    const { data } = await apiClient.get('/image/list')
+    return data
+  },
+
+  getStatus: async (imageId: string): Promise<Image> => {
+    const { data } = await apiClient.get(`/image/${imageId}`)
+    return data
+  },
+
+  delete: async (imageId: string): Promise<void> => {
+    await apiClient.delete(`/image/${imageId}`)
+  },
+
+  chat: async (request: ImageChatRequest, signal?: AbortSignal): Promise<ImageChatResponse> => {
+    const { data } = await apiClient.post('/image/chat/query', request, { signal })
+    return data
+  },
+
+  getChatHistory: async (imageId: string): Promise<ImageChatHistoryResponse> => {
+    const { data } = await apiClient.get(`/image/chat/history/${imageId}`)
     return data
   },
 }

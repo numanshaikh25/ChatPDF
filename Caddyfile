@@ -1,0 +1,25 @@
+:8888 {
+    handle /api/* {
+        reverse_proxy backend:8000 {
+            header_up Host localhost
+        }
+    }
+    handle_path /_svc/tusd/* {
+        reverse_proxy tusd:8080 {
+            header_up Host localhost
+        }
+    }
+    # Tusd returns absolute Location headers using X-Forwarded-Host, which produces
+    # paths like /files/<upload-id> (no /_svc/tusd prefix). Subsequent tus PATCH,
+    # HEAD, and DELETE requests from the browser land here.
+    handle /files/* {
+        reverse_proxy tusd:8080 {
+            header_up Host localhost
+        }
+    }
+    handle {
+        reverse_proxy frontend:3000 {
+            header_up Host localhost
+        }
+    }
+}
