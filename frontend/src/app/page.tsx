@@ -7,7 +7,6 @@ import { FileText, Loader2, LogOut, PanelLeftClose, PanelLeftOpen, Settings } fr
 import { PDFUploader } from '@/components/pdf/PDFUploader'
 import { PDFList } from '@/components/pdf/PDFList'
 import { ChatInterface } from '@/components/chat/ChatInterface'
-import { ThemeToggle } from '@/components/theme/ThemeToggle'
 import { useAuth } from '@/contexts/AuthContext'
 import { cn } from '@/lib/utils'
 
@@ -74,7 +73,6 @@ export default function Home() {
               </div>
             </div>
             <div className="flex items-center gap-1">
-              <ThemeToggle />
               <button
                 onClick={() => setSidebarOpen(false)}
                 className="flex h-7 w-7 items-center justify-center rounded-lg text-muted-foreground hover:bg-muted hover:text-foreground"
@@ -166,7 +164,6 @@ export default function Home() {
             >
               <PanelLeftOpen className="h-4 w-4" />
             </button>
-            <ThemeToggle className="bg-card border border-border shadow-sm" />
           </div>
         )}
 

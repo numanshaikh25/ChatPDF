@@ -10,14 +10,11 @@ import {
   FileText,
   KeyRound,
   Loader2,
-  Moon,
   Save,
-  Sun,
   User as UserIcon,
 } from 'lucide-react'
 import toast from 'react-hot-toast'
 import { useAuth } from '@/contexts/AuthContext'
-import { useTheme } from '@/components/theme/ThemeProvider'
 import { authApi } from '@/lib/api-client'
 
 type Tab = 'profile' | 'account'
@@ -25,7 +22,6 @@ type Tab = 'profile' | 'account'
 export default function SettingsPage() {
   const router = useRouter()
   const { user, isLoading, isAuthenticated, updateProfile, logout } = useAuth()
-  const { theme, toggleTheme } = useTheme()
   const [tab, setTab] = useState<Tab>('profile')
 
   // Profile form
@@ -187,30 +183,6 @@ export default function SettingsPage() {
         {/* ── Profile tab ── */}
         {tab === 'profile' && (
           <div className="space-y-6 animate-fade-in">
-            {/* Appearance card */}
-            <div className="rounded-2xl border border-border bg-card p-5">
-              <h2 className="mb-4 text-sm font-semibold">Appearance</h2>
-              <div className="flex items-center justify-between">
-                <div>
-                  <p className="text-sm font-medium">Theme</p>
-                  <p className="text-xs text-muted-foreground">
-                    Currently using {theme === 'dark' ? 'dark' : 'light'} mode
-                  </p>
-                </div>
-                <button
-                  onClick={toggleTheme}
-                  className="flex items-center gap-2 rounded-xl border border-border bg-muted px-3 py-2 text-sm font-medium hover:bg-accent hover:text-accent-foreground"
-                >
-                  {theme === 'dark' ? (
-                    <Sun className="h-4 w-4" />
-                  ) : (
-                    <Moon className="h-4 w-4" />
-                  )}
-                  {theme === 'dark' ? 'Light mode' : 'Dark mode'}
-                </button>
-              </div>
-            </div>
-
             {/* Profile info card */}
             <div className="rounded-2xl border border-border bg-card p-5">
               <h2 className="mb-4 text-sm font-semibold">Profile information</h2>
