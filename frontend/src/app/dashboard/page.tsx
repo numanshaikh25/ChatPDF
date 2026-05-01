@@ -71,13 +71,13 @@ export default function DashboardPage() {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2.5">
               <div
-                className="flex h-8 w-8 items-center justify-center rounded-xl shadow-sm"
+                className="flex h-8 w-8 items-center justify-center rounded-xl shadow-sm ring-2 ring-white/20"
                 style={{ background: 'var(--gradient-brand)' }}
               >
                 <FileText className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-sm font-bold tracking-tight leading-none">Onpdf</h1>
+                <h1 className="text-sm font-bold tracking-tight leading-none text-gradient-brand">Onpdf</h1>
                 <p className="text-[10px] text-muted-foreground mt-0.5">AI document assistant</p>
               </div>
             </div>

@@ -38,12 +38,12 @@ export default function LandingPage() {
       <header className="relative z-10 flex items-center justify-between px-6 py-4 max-w-6xl mx-auto">
         <div className="flex items-center gap-2.5">
           <div
-            className="flex h-9 w-9 items-center justify-center rounded-xl shadow-md"
+            className="flex h-9 w-9 items-center justify-center rounded-xl shadow-md ring-2 ring-white/20"
             style={{ background: 'var(--gradient-brand)' }}
           >
             <FileText className="h-5 w-5 text-white" />
           </div>
-          <span className="text-lg font-bold tracking-tight">Onpdf</span>
+          <span className="text-lg font-bold tracking-tight text-gradient-brand">Onpdf</span>
         </div>
 
         <nav className="flex items-center gap-3">
@@ -154,10 +154,10 @@ export default function LandingPage() {
       {/* ── Why Onpdf ───────────────────────────────────────── */}
       <section className="relative z-10 mx-auto max-w-5xl px-6 pb-24">
         <div
-          className="rounded-3xl p-px"
+          className="rounded-3xl p-[3px] shadow-xl"
           style={{ background: 'var(--gradient-brand)' }}
         >
-          <div className="rounded-[calc(1.5rem-1px)] bg-card px-8 py-10">
+          <div className="rounded-[calc(1.5rem-3px)] bg-card px-8 py-10">
             <h2 className="text-2xl font-bold tracking-tight text-center mb-10">
               Why Onpdf?
             </h2>
@@ -226,12 +226,12 @@ export default function LandingPage() {
         <div className="mx-auto max-w-5xl flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
             <div
-              className="flex h-6 w-6 items-center justify-center rounded-lg"
+              className="flex h-6 w-6 items-center justify-center rounded-lg ring-1 ring-white/20"
               style={{ background: 'var(--gradient-brand)' }}
             >
               <FileText className="h-3.5 w-3.5 text-white" />
             </div>
-            <span className="text-sm font-semibold">Onpdf</span>
+            <span className="text-sm font-semibold text-gradient-brand">Onpdf</span>
           </div>
           <p className="text-xs text-muted-foreground">
             &copy; {new Date().getFullYear()} Onpdf. All rights reserved.

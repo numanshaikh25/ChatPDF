@@ -69,7 +69,7 @@ export default function LoginPage() {
           {/* Brand */}
           <div className="mb-8 flex flex-col items-center gap-3">
             <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg"
+              className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg ring-2 ring-white/20"
               style={{ background: 'var(--gradient-brand)' }}
             >
               <FileText className="h-6 w-6 text-white" />
