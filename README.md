@@ -1,3 +1,4 @@
+<!-- QA fresh-app run 2026-05-11 -->
 
 
 # ChatPDF - AI-Powered PDF Chat Application
