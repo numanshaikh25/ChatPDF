@@ -26,18 +26,18 @@
     --border: 220 14% 88%;
     --input: 220 14% 88%;
 
-    /* Brand — Purple */
-    --primary: 270 70% 50%;
+    /* Brand — Blue */
+    --primary: 217 91% 50%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 270 70% 42%;
+    --primary-hover: 217 91% 42%;
 
     /* Secondary */
-    --secondary: 270 20% 94%;
-    --secondary-foreground: 270 25% 22%;
+    --secondary: 214 20% 94%;
+    --secondary-foreground: 217 25% 22%;
 
     /* Accent */
-    --accent: 270 60% 94%;
-    --accent-foreground: 270 65% 28%;
+    --accent: 214 60% 94%;
+    --accent-foreground: 217 65% 28%;
 
     /* Destructive */
     --destructive: 0 72% 51%;
@@ -52,17 +52,17 @@
     --warning-foreground: 0 0% 100%;
 
     /* Focus ring */
-    --ring: 270 70% 50%;
+    --ring: 217 91% 50%;
 
     /* Radius */
     --radius: 0.625rem;
 
     /* Sidebar */
-    --sidebar-bg: 270 25% 97%;
-    --sidebar-border: 270 18% 90%;
+    --sidebar-bg: 214 25% 97%;
+    --sidebar-border: 214 18% 90%;
 
     /* Gradient tokens */
-    --gradient-brand: linear-gradient(135deg, hsl(270 70% 50%) 0%, hsl(290 70% 55%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(217 91% 50%) 0%, hsl(200 91% 55%) 100%);
     --gradient-surface: linear-gradient(160deg, hsl(220 14% 96%) 0%, hsl(220 14% 94%) 100%);
     --gradient-muted: linear-gradient(135deg, hsl(220 14% 92%) 0%, hsl(220 14% 91%) 100%);
   }
@@ -90,18 +90,18 @@
     --border: 224 18% 18%;
     --input: 224 18% 18%;
 
-    /* Brand — Purple (slightly lighter for dark bg) */
-    --primary: 270 75% 65%;
+    /* Brand — Blue (slightly lighter for dark bg) */
+    --primary: 217 91% 65%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 270 75% 72%;
+    --primary-hover: 217 91% 72%;
 
     /* Secondary */
-    --secondary: 270 22% 16%;
-    --secondary-foreground: 270 14% 82%;
+    --secondary: 214 22% 16%;
+    --secondary-foreground: 214 14% 82%;
 
     /* Accent */
-    --accent: 270 40% 18%;
-    --accent-foreground: 270 80% 80%;
+    --accent: 214 40% 18%;
+    --accent-foreground: 214 80% 80%;
 
     /* Destructive */
     --destructive: 0 72% 58%;
@@ -116,14 +116,14 @@
     --warning-foreground: 0 0% 100%;
 
     /* Focus ring */
-    --ring: 270 75% 65%;
+    --ring: 217 91% 65%;
 
     /* Sidebar */
-    --sidebar-bg: 270 25% 9%;
-    --sidebar-border: 270 20% 14%;
+    --sidebar-bg: 217 25% 9%;
+    --sidebar-border: 217 20% 14%;
 
     /* Gradient tokens */
-    --gradient-brand: linear-gradient(135deg, hsl(270 75% 65%) 0%, hsl(290 70% 65%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(217 91% 65%) 0%, hsl(200 91% 65%) 100%);
     --gradient-surface: linear-gradient(160deg, hsl(224 20% 14%) 0%, hsl(224 20% 12%) 100%);
     --gradient-muted: linear-gradient(135deg, hsl(224 18% 18%) 0%, hsl(224 18% 16%) 100%);
   }
