@@ -86,8 +86,7 @@ export default function LandingPage() {
         <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4">
           <Link
             href="/signup"
-            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white shadow-md transition-opacity hover:opacity-90"
-            style={{ background: 'var(--gradient-brand)' }}
+            className="inline-flex items-center gap-2 rounded-xl px-6 py-3 text-base font-semibold text-white shadow-md transition-opacity hover:opacity-90 bg-blue-600 hover:bg-blue-700"
           >
             Start for free
             <ArrowRight className="h-4 w-4" />
