@@ -1,8 +1,10 @@
 'use client'
 
 import { useState, FormEvent, KeyboardEvent, useRef, useEffect } from 'react'
-import { Send, Loader2 } from 'lucide-react'
+import { Send, Loader2, FileSearch } from 'lucide-react'
 import { cn } from '@/lib/utils'
+import { TextIssuePanel } from './TextIssuePanel'
+import { analyzeText } from '@/lib/textAnalysis'
 
 interface ChatInputProps {
   onSend: (message: string) => void
@@ -19,6 +21,7 @@ function countWords(text: string): number {
 
 export function ChatInput({ onSend, disabled, isLoading, placeholder }: ChatInputProps) {
   const [message, setMessage] = useState('')
+  const [showTextCheck, setShowTextCheck] = useState(false)
   const textareaRef = useRef<HTMLTextAreaElement>(null)
 
   const adjustHeight = () => {
@@ -51,6 +54,8 @@ export function ChatInput({ onSend, disabled, isLoading, placeholder }: ChatInpu
   const wordCount = countWords(message)
   const charCount = message.length
   const showCounter = message.length > 0
+  const issueCount = showCounter ? analyzeText(message).length : 0
+  const hasIssues = issueCount > 0
 
   return (
     <div className="flex flex-col gap-1">
@@ -101,18 +106,49 @@ export function ChatInput({ onSend, disabled, isLoading, placeholder }: ChatInpu
         </button>
       </form>
 
-      {/* Word / character counter */}
+      {/* Word / character counter + text-check toggle */}
       {showCounter && (
-        <div className="flex items-center justify-end gap-2 px-1 animate-fade-in">
-          <span className="text-[10px] text-muted-foreground/60 tabular-nums select-none">
-            <span className="font-medium text-muted-foreground/80">{wordCount}</span>
-            {' '}{wordCount === 1 ? 'word' : 'words'}
-          </span>
-          <span className="text-muted-foreground/30 text-[10px] select-none">·</span>
-          <span className="text-[10px] text-muted-foreground/60 tabular-nums select-none">
-            <span className="font-medium text-muted-foreground/80">{charCount}</span>
-            {' '}{charCount === 1 ? 'char' : 'chars'}
-          </span>
+        <div className="flex items-center justify-between gap-2 px-1 animate-fade-in">
+          {/* Counters */}
+          <div className="flex items-center gap-2">
+            <span className="text-[10px] text-muted-foreground/60 tabular-nums select-none">
+              <span className="font-medium text-muted-foreground/80">{wordCount}</span>
+              {' '}{wordCount === 1 ? 'word' : 'words'}
+            </span>
+            <span className="text-muted-foreground/30 text-[10px] select-none">·</span>
+            <span className="text-[10px] text-muted-foreground/60 tabular-nums select-none">
+              <span className="font-medium text-muted-foreground/80">{charCount}</span>
+              {' '}{charCount === 1 ? 'char' : 'chars'}
+            </span>
+          </div>
+
+          {/* Text-check toggle button */}
+          <button
+            type="button"
+            onClick={() => setShowTextCheck((v) => !v)}
+            className={cn(
+              'inline-flex items-center gap-1 px-2 py-0.5 rounded-full border text-[10px] font-medium transition-all duration-150 select-none',
+              showTextCheck
+                ? 'bg-primary/10 text-primary border-primary/30'
+                : hasIssues
+                  ? 'bg-amber-50 dark:bg-amber-950/30 text-amber-700 dark:text-amber-400 border-amber-200 dark:border-amber-800 hover:bg-amber-100 dark:hover:bg-amber-900/40'
+                  : 'bg-muted text-muted-foreground border-border hover:bg-accent'
+            )}
+            title={showTextCheck ? 'Hide text analysis' : 'Show text analysis'}
+          >
+            <FileSearch className="h-2.5 w-2.5 shrink-0" />
+            {hasIssues
+              ? `${issueCount} ${issueCount === 1 ? 'issue' : 'issues'}`
+              : 'Check text'
+            }
+          </button>
+        </div>
+      )}
+
+      {/* Text-issue analysis panel */}
+      {showCounter && showTextCheck && (
+        <div className="px-1 animate-fade-in">
+          <TextIssuePanel text={message} />
         </div>
       )}
     </div>
