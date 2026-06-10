@@ -1,1 +1,2 @@
 upstream-moved-test 20260610T083200Z
+moved-path-test-2 20260610T084018Z
