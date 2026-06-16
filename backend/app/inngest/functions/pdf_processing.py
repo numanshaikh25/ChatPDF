@@ -60,9 +60,7 @@ async def process_pdf(ctx, step):
 
             # Extract text from bytes
             extracted_data = extract_text_from_pdf_bytes(pdf_bytes)
-            logger.info(
-                f"Extracted {extracted_data['total_pages']} pages from PDF {pdf_id}"
-            )
+            logger.info(f"Extracted {extracted_data['total_pages']} pages from PDF {pdf_id}")
 
             # Chunk text
             chunks = text_splitter.split_pages(extracted_data["pages"])
@@ -108,9 +106,10 @@ async def process_pdf(ctx, step):
             f"{result['total_pages']} pages, {result['total_chunks']} chunks"
         )
 
-    except Exception as e:
+    except Exception as exc:
         # Update status to failed
-        logger.error(f"Error processing PDF {pdf_id}: {e}")
+        logger.error(f"Error processing PDF {pdf_id}: {exc}")
+        error_msg = str(exc)
 
         async def update_status_failed():
             async with AsyncSessionLocal() as db:
@@ -118,7 +117,7 @@ async def process_pdf(ctx, step):
                 pdf = result.scalar_one_or_none()
                 if pdf:
                     pdf.status = "failed"
-                    pdf.error_message = str(e)
+                    pdf.error_message = error_msg
                     await db.commit()
                     logger.info(f"Updated PDF status to failed: {pdf_id}")
 

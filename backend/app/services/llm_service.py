@@ -13,8 +13,6 @@ class LLMService:
 
     def __init__(self):
         """Initialize ChatOpenAI model"""
-        model_name = settings.openai_model.lower()
-
         self.llm = ChatOpenAI(
             model=settings.openai_model,
             max_completion_tokens=settings.openai_max_tokens,

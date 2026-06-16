@@ -1,5 +1,5 @@
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select
 from typing import List, Dict
 import logging
 
@@ -73,9 +73,7 @@ class VectorStoreService:
                         }
                     )
 
-            logger.info(
-                f"Found {len(similar_chunks)} similar chunks for query (pdf_id={pdf_id})"
-            )
+            logger.info(f"Found {len(similar_chunks)} similar chunks for query (pdf_id={pdf_id})")
 
             return similar_chunks
 

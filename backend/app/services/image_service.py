@@ -52,7 +52,7 @@ class ImageService:
             messages = [SystemMessage(content=SYSTEM_PROMPT)]
 
             if chat_history:
-                for msg in chat_history[-settings.max_chat_history:]:
+                for msg in chat_history[-settings.max_chat_history :]:
                     if msg["role"] == "user":
                         messages.append(HumanMessage(content=msg["content"]))
                     elif msg["role"] == "assistant":

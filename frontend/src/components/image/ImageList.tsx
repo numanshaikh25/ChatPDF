@@ -24,7 +24,6 @@ function ImageListItem({
   onDelete: () => void
 }) {
   const isReady = image.status === 'ready'
-  const isFailed = image.status === 'failed'
 
   return (
     <div
@@ -112,8 +111,9 @@ export function ImageList({ selectedImageId, onSelect }: ImageListProps) {
     try {
       await deleteMutation.mutateAsync(imageId)
       toast.success('Image deleted')
-    } catch (error: any) {
-      toast.error(`Failed to delete: ${error.message}`)
+    } catch (error) {
+      const err = error as { message?: string }
+      toast.error(`Failed to delete: ${err.message || 'Unknown error'}`)
     }
   }
 

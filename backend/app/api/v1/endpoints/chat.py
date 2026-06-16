@@ -146,9 +146,7 @@ async def get_chat_history(
         messages = list(reversed(messages))
 
         # Convert to schema
-        chat_messages = [
-            ChatMessage(role=msg.role, content=msg.content) for msg in messages
-        ]
+        chat_messages = [ChatMessage(role=msg.role, content=msg.content) for msg in messages]
 
         return ChatHistoryResponse(
             pdf_id=pdf_id,

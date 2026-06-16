@@ -2,7 +2,7 @@
 
 import { useCallback, useState } from 'react'
 import { useDropzone } from 'react-dropzone'
-import { Upload, ImageIcon, X, Loader2 } from 'lucide-react'
+import { Upload, ImageIcon, Loader2 } from 'lucide-react'
 import { useUploadImage } from '@/hooks/useImage'
 import { formatBytes } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -28,8 +28,9 @@ export function ImageUploader({ onUploadComplete }: { onUploadComplete?: (imageI
         setIsUploading(false)
         setCurrentFile(null)
         onUploadComplete?.(result.image_id.toString())
-      } catch (error: any) {
-        toast.error(`Upload failed: ${error?.response?.data?.detail || error.message}`)
+      } catch (error) {
+        const err = error as { response?: { data?: { detail?: string } }; message?: string }
+        toast.error(`Upload failed: ${err?.response?.data?.detail || err.message || 'Unknown error'}`)
         setIsUploading(false)
         setCurrentFile(null)
       }

@@ -1,7 +1,6 @@
 import logging
 from uuid import uuid4
 
-from app.config import settings
 from app.db.models import Image, ImageMessage
 from app.db.session import get_db
 from app.schemas.image import (
@@ -48,7 +47,7 @@ async def upload_image(
     if len(data) > MAX_IMAGE_SIZE:
         raise HTTPException(
             status_code=400,
-            detail=f"Image too large (max 10 MB)",
+            detail="Image too large (max 10 MB)",
         )
 
     if len(data) == 0:

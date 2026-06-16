@@ -93,7 +93,6 @@ async def handle_upload_complete(
         logger.info(f"Upload-ID: {upload_id}, Metadata: {metadata}")
 
         pdf_id_str = metadata.get("pdf_id")
-        filename = metadata.get("filename")
 
         if not pdf_id_str:
             logger.error("No pdf_id in Tusd metadata")

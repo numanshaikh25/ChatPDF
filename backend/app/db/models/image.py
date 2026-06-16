@@ -35,9 +35,7 @@ class ImageMessage(Base):
     content = Column(Text, nullable=False)
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
-    __table_args__ = (
-        Index("idx_image_messages_image_id_created_at", "image_id", "created_at"),
-    )
+    __table_args__ = (Index("idx_image_messages_image_id_created_at", "image_id", "created_at"),)
 
     def __repr__(self):
         return f"<ImageMessage {self.role} for Image {self.image_id}>"

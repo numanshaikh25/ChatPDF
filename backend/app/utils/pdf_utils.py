@@ -34,10 +34,12 @@ def extract_text_from_pdf_bytes(pdf_bytes: bytes) -> Dict[str, Any]:
         pages_text: List[Dict[str, Any]] = []
         for doc in documents:
             page_num = doc.metadata.get("page", 0) + 1  # LangChain uses 0-indexed pages
-            pages_text.append({
-                "page_number": page_num,
-                "text": doc.page_content,
-            })
+            pages_text.append(
+                {
+                    "page_number": page_num,
+                    "text": doc.page_content,
+                }
+            )
 
         full_text = "\n\n".join([p["text"] for p in pages_text])
         total_pages = len(pages_text)
@@ -77,10 +79,12 @@ def extract_text_from_pdf(pdf_path: str) -> Dict[str, Any]:
         pages_text: List[Dict[str, Any]] = []
         for doc in documents:
             page_num = doc.metadata.get("page", 0) + 1  # LangChain uses 0-indexed pages
-            pages_text.append({
-                "page_number": page_num,
-                "text": doc.page_content,
-            })
+            pages_text.append(
+                {
+                    "page_number": page_num,
+                    "text": doc.page_content,
+                }
+            )
 
         full_text = "\n\n".join([p["text"] for p in pages_text])
         total_pages = len(pages_text)

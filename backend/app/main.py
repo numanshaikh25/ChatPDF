@@ -22,7 +22,9 @@ logger = logging.getLogger(__name__)
 
 def run_migrations() -> None:
     """Run Alembic database migrations on startup."""
-    alembic_ini = os.path.join(os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "alembic.ini")
+    alembic_ini = os.path.join(
+        os.path.dirname(os.path.dirname(os.path.abspath(__file__))), "alembic.ini"
+    )
     alembic_cfg = Config(alembic_ini)
     logger.info("Running database migrations...")
     command.upgrade(alembic_cfg, "head")

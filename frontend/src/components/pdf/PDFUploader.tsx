@@ -59,8 +59,9 @@ export function PDFUploader({ onUploadComplete }: { onUploadComplete?: (pdfId: s
 
         setTusUpload(upload)
         upload.start()
-      } catch (error: any) {
-        toast.error(`Failed to initialize upload: ${error.message}`)
+      } catch (error) {
+        const err = error as { message?: string }
+        toast.error(`Failed to initialize upload: ${err.message || 'Unknown error'}`)
         setIsUploading(false)
         setCurrentFile(null)
       }

@@ -22,7 +22,7 @@ class InitUploadResponse(BaseModel):
 class PDFStatusResponse(BaseModel):
     """PDF processing status"""
 
-    pdf_id: UUID = Field(..., validation_alias='id')
+    pdf_id: UUID = Field(..., validation_alias="id")
     filename: str
     status: str  # pending, processing, completed, failed
     file_size: int

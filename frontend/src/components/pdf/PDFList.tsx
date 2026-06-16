@@ -2,7 +2,7 @@
 
 import { FileText, Loader2, Trash2, CheckCircle2, XCircle, Clock, UploadCloud } from 'lucide-react'
 import { usePDFList, useDeletePDF, usePDFStatus } from '@/hooks/usePDF'
-import { formatBytes, formatDate } from '@/lib/utils'
+import { formatBytes } from '@/lib/utils'
 import toast from 'react-hot-toast'
 import { cn } from '@/lib/utils'
 import type { PDF } from '@/types/pdf'
@@ -132,8 +132,9 @@ export function PDFList({ selectedPdfId, onSelect }: PDFListProps) {
     try {
       await deleteMutation.mutateAsync(pdfId)
       toast.success('Document deleted')
-    } catch (error: any) {
-      toast.error(`Failed to delete: ${error.message}`)
+    } catch (error) {
+      const err = error as { message?: string }
+      toast.error(`Failed to delete: ${err.message || 'Unknown error'}`)
     }
   }
 

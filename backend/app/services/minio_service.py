@@ -86,7 +86,9 @@ class MinIOService:
             logger.error(f"Error uploading file {object_name}: {e}")
             raise
 
-    def upload_bytes(self, object_name: str, data: bytes, content_type: str = "application/pdf") -> None:
+    def upload_bytes(
+        self, object_name: str, data: bytes, content_type: str = "application/pdf"
+    ) -> None:
         """
         Upload bytes to MinIO
 

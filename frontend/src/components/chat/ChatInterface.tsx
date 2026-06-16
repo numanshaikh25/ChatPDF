@@ -126,8 +126,9 @@ export function ChatInterface({ activeDoc, sidebarOpen }: ChatInterfaceProps) {
           chat_history: messages as { role: 'user' | 'assistant'; content: string }[],
         })
       }
-    } catch (error: any) {
-      toast.error(`Failed to send message: ${error.response?.data?.detail || error.message}`)
+    } catch (error) {
+      const err = error as { response?: { data?: { detail?: string } }; message?: string }
+      toast.error(`Failed to send message: ${err.response?.data?.detail || err.message || 'Unknown error'}`)
     }
   }
 

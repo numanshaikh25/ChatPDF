@@ -13,7 +13,7 @@ async def health_check():
         "status": "healthy",
         "app": settings.app_name,
         "version": "0.1.0",
-        "environment": settings.environment
+        "environment": settings.environment,
     }
 
 
@@ -23,8 +23,4 @@ async def database_health():
     Database health check
     TODO: Implement actual database connection check
     """
-    return {
-        "status": "healthy",
-        "database": "postgresql",
-        "message": "Database connection OK"
-    }
+    return {"status": "healthy", "database": "postgresql", "message": "Database connection OK"}
