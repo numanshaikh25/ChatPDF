@@ -72,6 +72,7 @@ function PDFListItem({
           <p className="text-[11px] text-muted-foreground/70 mt-0.5 leading-tight">
             {formatBytes(current.file_size)}
             {current.total_pages != null && ` · ${current.total_pages}p`}
+            {current.word_count != null && ` · ${current.word_count.toLocaleString()} words`}
           </p>
 
           {/* Status badge */}

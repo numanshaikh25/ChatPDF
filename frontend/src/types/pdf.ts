@@ -4,6 +4,7 @@ export interface PDF {
   status: 'pending' | 'uploaded' | 'processing' | 'completed' | 'failed'
   file_size: number
   total_pages?: number
+  word_count?: number
   created_at: string
   updated_at: string
   error_message?: string

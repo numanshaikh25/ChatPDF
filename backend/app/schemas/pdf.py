@@ -27,6 +27,7 @@ class PDFStatusResponse(BaseModel):
     status: str  # pending, processing, completed, failed
     file_size: int
     total_pages: Optional[int] = None
+    word_count: Optional[int] = None
     created_at: datetime
     updated_at: datetime
     error_message: Optional[str] = None

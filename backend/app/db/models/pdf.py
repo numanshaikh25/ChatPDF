@@ -17,6 +17,7 @@ class PDF(Base):
     minio_key = Column(String(500), nullable=False)  # Object key in MinIO
     file_size = Column(BigInteger, nullable=False)
     total_pages = Column(Integer, nullable=True)
+    word_count = Column(Integer, nullable=True)
     status = Column(
         String(20),
         nullable=False,

@@ -62,6 +62,11 @@ async def process_pdf(ctx, step):
             extracted_data = extract_text_from_pdf_bytes(pdf_bytes)
             logger.info(f"Extracted {extracted_data['total_pages']} pages from PDF {pdf_id}")
 
+            # Calculate word count from all pages
+            full_text = " ".join(page["text"] for page in extracted_data["pages"])
+            word_count = len(full_text.split())
+            logger.info(f"Calculated word count: {word_count} words")
+
             # Chunk text
             chunks = text_splitter.split_pages(extracted_data["pages"])
             logger.info(f"Created {len(chunks)} chunks from PDF {pdf_id}")
@@ -87,11 +92,12 @@ async def process_pdf(ctx, step):
 
                 db.add_all(chunk_records)
 
-                # Update PDF with total pages and status
+                # Update PDF with total pages, word count, and status
                 result = await db.execute(select(PDF).where(PDF.id == pdf_id))
                 pdf = result.scalar_one_or_none()
                 if pdf:
                     pdf.total_pages = extracted_data["total_pages"]
+                    pdf.word_count = word_count
                     pdf.status = "completed"
 
                 await db.commit()
