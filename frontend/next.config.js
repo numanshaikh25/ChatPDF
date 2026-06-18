@@ -7,6 +7,12 @@ const nextConfig = {
     NEXT_PUBLIC_TUSD_ENDPOINT: process.env.NEXT_PUBLIC_TUSD_ENDPOINT,
     NEXT_PUBLIC_MAX_FILE_SIZE: process.env.NEXT_PUBLIC_MAX_FILE_SIZE,
   },
+  images: {
+    remotePatterns: [
+      { protocol: 'https', hostname: '**' },
+      { protocol: 'http', hostname: '**' },
+    ],
+  },
 }
 
 module.exports = nextConfig

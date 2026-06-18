@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import {
   ArrowLeft,
   Eye,
@@ -140,9 +141,11 @@ export default function SettingsPage() {
         {/* Profile hero */}
         <div className="mb-8 flex items-center gap-4">
           {user?.avatar_url ? (
-            <img
+            <Image
               src={user.avatar_url}
               alt={user.username}
+              width={64}
+              height={64}
               className="h-16 w-16 rounded-2xl object-cover ring-2 ring-border"
             />
           ) : (

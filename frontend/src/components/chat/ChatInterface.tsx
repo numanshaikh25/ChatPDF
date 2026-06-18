@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useRef, useState, useCallback } from 'react'
+import { useEffect, useMemo, useRef, useState, useCallback } from 'react'
 import {
   Loader2, MessageSquare, Sparkles, FileText, ImageIcon,
   AlertCircle, ChevronDown, Zap,
@@ -72,9 +72,10 @@ export function ChatInterface({ activeDoc, sidebarOpen }: ChatInterfaceProps) {
     ? pdfStatus?.status === 'completed'
     : imageDetail?.status === 'ready'
   const isLoadingHistory = isPdf ? isPdfHistoryLoading : isImageHistoryLoading
-  const messages: Message[] = isPdf
-    ? (pdfHistory?.messages ?? [])
-    : (imageHistory?.messages ?? [])
+  const messages: Message[] = useMemo(
+    () => isPdf ? (pdfHistory?.messages ?? []) : (imageHistory?.messages ?? []),
+    [isPdf, pdfHistory?.messages, imageHistory?.messages]
+  )
   const isMutationPending = isPdf ? pdfMutation.isPending : imageMutation.isPending
 
   const suggestions = isImage ? IMAGE_SUGGESTION_PROMPTS : SUGGESTION_PROMPTS

@@ -3,6 +3,7 @@
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/navigation'
 import Link from 'next/link'
+import Image from 'next/image'
 import { FileText, ImageIcon, Loader2, LogOut, PanelLeftClose, PanelLeftOpen, Settings } from 'lucide-react'
 import { PDFUploader } from '@/components/pdf/PDFUploader'
 import { PDFList } from '@/components/pdf/PDFList'
@@ -163,9 +164,11 @@ export default function DashboardPage() {
         <div className="shrink-0 border-t border-[hsl(var(--sidebar-border))] px-3 py-3">
           <div className="flex items-center gap-2.5">
             {user?.avatar_url ? (
-              <img
+              <Image
                 src={user.avatar_url}
                 alt={user.username}
+                width={32}
+                height={32}
                 className="h-8 w-8 rounded-lg object-cover ring-1 ring-border"
               />
             ) : (
