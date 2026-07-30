@@ -2,7 +2,7 @@ import logging
 from typing import Dict, List
 
 from app.config import settings
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 
 logger = logging.getLogger(__name__)
@@ -25,7 +25,7 @@ class LLMService:
         query: str,
         context_chunks: List[Dict],
         chat_history: List[Dict] = None,
-    ) -> List:
+    ) -> List[BaseMessage]:
         """
         Build chat messages with context and history
 
@@ -37,7 +37,7 @@ class LLMService:
         Returns:
             List of messages for the LLM
         """
-        messages = []
+        messages: List[BaseMessage] = []
 
         # System message
         system_prompt = """You are a helpful AI assistant that answers questions based on the provided PDF document context.

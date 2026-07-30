@@ -1,3 +1,4 @@
+from typing import Any
 from sqlalchemy import Column, String, Text, DateTime, ForeignKey, Index, ARRAY
 from sqlalchemy.dialects.postgresql import UUID
 from sqlalchemy.sql import func
@@ -15,7 +16,7 @@ class ChatMessage(Base):
     pdf_id = Column(UUID(as_uuid=True), ForeignKey("pdfs.id", ondelete="CASCADE"), nullable=False)
     role = Column(String(20), nullable=False)  # 'user' or 'assistant'
     content = Column(Text, nullable=False)
-    retrieved_chunk_ids = Column(ARRAY(UUID(as_uuid=True)), nullable=True)  # For citations
+    retrieved_chunk_ids: Any = Column(ARRAY(UUID(as_uuid=True)), nullable=True)  # For citations
     created_at = Column(DateTime(timezone=True), server_default=func.now(), nullable=False)
 
     # Index for efficient queries

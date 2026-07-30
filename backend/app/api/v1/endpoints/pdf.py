@@ -109,8 +109,8 @@ async def handle_upload_complete(
         # Update PDF record with MinIO key from Tusd
         # Tusd stores files with just the hash part of the upload ID (before the +)
         minio_key = upload_id.split("+")[0] if "+" in upload_id else upload_id
-        pdf.minio_key = minio_key
-        pdf.status = "uploaded"
+        pdf.minio_key = minio_key  # type: ignore
+        pdf.status = "uploaded"  # type: ignore
 
         await db.commit()
 
@@ -223,7 +223,7 @@ async def delete_pdf(
         # Delete from MinIO
         if pdf.minio_key:
             try:
-                minio_service.delete_file(pdf.minio_key)
+                minio_service.delete_file(pdf.minio_key)  # type: ignore
                 logger.info(f"Deleted file from MinIO: {pdf.minio_key}")
             except Exception as e:
                 logger.warning(f"Failed to delete from MinIO: {e}")

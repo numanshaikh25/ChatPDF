@@ -5,7 +5,7 @@ from typing import Dict, List
 
 from app.config import settings
 from app.services.minio_service import minio_service
-from langchain_core.messages import AIMessage, HumanMessage, SystemMessage
+from langchain_core.messages import AIMessage, HumanMessage, SystemMessage, BaseMessage
 from langchain_openai import ChatOpenAI
 
 logger = logging.getLogger(__name__)
@@ -49,7 +49,7 @@ class ImageService:
             ext = os.path.splitext(minio_key)[1].lower()
             mime_type = ext_to_mime.get(ext, "image/png")
 
-            messages = [SystemMessage(content=SYSTEM_PROMPT)]
+            messages: List[BaseMessage] = [SystemMessage(content=SYSTEM_PROMPT)]
 
             if chat_history:
                 for msg in chat_history[-settings.max_chat_history :]:

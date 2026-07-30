@@ -132,14 +132,14 @@ async def change_password(
 ):
     """Change authenticated user password"""
     if not auth_service.verify_password(
-        password_data.current_password, current_user.hashed_password
+        password_data.current_password, current_user.hashed_password  # type: ignore
     ):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST,
             detail="Current password is incorrect",
         )
 
-    current_user.hashed_password = auth_service.hash_password(password_data.new_password)
+    current_user.hashed_password = auth_service.hash_password(password_data.new_password)  # type: ignore
     db.add(current_user)
     await db.flush()
 

@@ -53,6 +53,7 @@ dev = [
     "pytest-asyncio>=0.21.0",
     "black>=24.1.0",
     "ruff>=0.2.0",
+    "mypy>=1.8.0",
 ]
 
 [tool.hatch.build.targets.wheel]
@@ -65,6 +66,13 @@ target-version = ['py311']
 [tool.ruff]
 line-length = 100
 target-version = "py311"
+
+[tool.mypy]
+python_version = "3.11"
+plugins = ["pydantic.mypy"]
+ignore_missing_imports = true
+strict_optional = false
+no_implicit_optional = false
 
 [build-system]
 requires = ["hatchling"]

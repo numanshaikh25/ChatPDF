@@ -74,7 +74,7 @@ async def create_user(db: AsyncSession, user_data: UserCreate) -> User:
 
 async def authenticate_user(db: AsyncSession, email: str, password: str) -> Optional[User]:
     user = await get_user_by_email(db, email)
-    if not user or not verify_password(password, user.hashed_password):
+    if not user or not verify_password(password, user.hashed_password):  # type: ignore
         return None
     return user
 
@@ -84,8 +84,8 @@ async def create_password_reset_token(db: AsyncSession, email: str) -> Optional[
     if not user or not user.is_active:
         return None
     token = secrets.token_urlsafe(32)
-    user.password_reset_token = token
-    user.password_reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)
+    user.password_reset_token = token  # type: ignore
+    user.password_reset_expires = datetime.now(timezone.utc) + timedelta(hours=1)  # type: ignore
     db.add(user)
     await db.flush()
     return token
@@ -103,9 +103,9 @@ async def reset_password_with_token(db: AsyncSession, token: str, new_password: 
         expires = expires.replace(tzinfo=timezone.utc)
     if expires < datetime.now(timezone.utc):
         return False
-    user.hashed_password = hash_password(new_password)
-    user.password_reset_token = None
-    user.password_reset_expires = None
+    user.hashed_password = hash_password(new_password)  # type: ignore
+    user.password_reset_token = None  # type: ignore
+    user.password_reset_expires = None  # type: ignore
     db.add(user)
     await db.flush()
     return True

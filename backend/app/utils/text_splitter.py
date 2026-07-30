@@ -1,5 +1,5 @@
 from langchain_text_splitters import RecursiveCharacterTextSplitter
-from typing import List, Dict
+from typing import Any, List, Dict, Optional
 import logging
 
 from app.config import settings
@@ -12,8 +12,8 @@ class PDFTextSplitter:
 
     def __init__(
         self,
-        chunk_size: int = None,
-        chunk_overlap: int = None,
+        chunk_size: Optional[int] = None,
+        chunk_overlap: Optional[int] = None,
     ):
         """
         Initialize text splitter
@@ -46,7 +46,7 @@ class PDFTextSplitter:
         logger.info(f"Split text into {len(chunks)} chunks")
         return chunks
 
-    def split_pages(self, pages: List[Dict[str, any]]) -> List[Dict[str, any]]:
+    def split_pages(self, pages: List[Dict[str, Any]]) -> List[Dict[str, Any]]:
         """
         Split pages into chunks while preserving page numbers
 
