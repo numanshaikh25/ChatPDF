@@ -122,7 +122,7 @@ async def image_chat_query(
         history = [msg.model_dump() for msg in (request.chat_history or [])]
 
         response_text = await image_service.analyze_image(
-            minio_key=image.minio_key,  # type: ignore
+            minio_key=image.minio_key,
             query=request.message,
             chat_history=history,
         )
@@ -201,7 +201,7 @@ async def delete_image(
 
         if image.minio_key:
             try:
-                minio_service.delete_file(image.minio_key)  # type: ignore
+                minio_service.delete_file(image.minio_key)
             except Exception as e:
                 logger.warning(f"Failed to delete image from MinIO: {e}")
 

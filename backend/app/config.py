@@ -28,7 +28,9 @@ class Settings(BaseSettings):
             if v.startswith("["):
                 return json.loads(v)
             return [origin.strip() for origin in v.split(",") if origin.strip()]
-        return v  # type: ignore[return-value]
+        if isinstance(v, list):
+            return v
+        return []
 
     # Database
     database_url: str

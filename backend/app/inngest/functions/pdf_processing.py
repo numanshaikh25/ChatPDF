@@ -2,8 +2,7 @@ import logging
 
 import inngest
 from sqlalchemy import select
-from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession
-from sqlalchemy.orm import sessionmaker
+from sqlalchemy.ext.asyncio import create_async_engine, AsyncSession, async_sessionmaker
 
 from app.inngest.client import inngest_client
 from app.services.minio_service import minio_service
@@ -17,7 +16,7 @@ logger = logging.getLogger(__name__)
 
 # Create async database engine for Inngest functions
 engine = create_async_engine(settings.database_url)
-AsyncSessionLocal = sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)  # type: ignore
+AsyncSessionLocal = async_sessionmaker(engine, class_=AsyncSession, expire_on_commit=False)
 
 
 @inngest_client.create_function(
