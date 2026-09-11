@@ -13,7 +13,7 @@ const inter = Inter({
 })
 
 export const metadata: Metadata = {
-  title: 'Onpdf — Chat with your documents',
+  title: 'Dokument — Chat with your documents',
   description: 'Upload PDFs and chat with them using AI',
 }
 

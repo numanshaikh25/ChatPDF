@@ -24,6 +24,7 @@ router = APIRouter()
 @router.post("/init-upload", response_model=InitUploadResponse)
 async def initialize_upload(
     request: InitUploadRequest,
+    req: Request,
     db: AsyncSession = Depends(get_db),
 ):
     """
@@ -57,11 +58,23 @@ async def initialize_upload(
 
         logger.info(f"Created PDF record: {pdf_id}")
 
+        # Determine the correct upload URL based on the request
+        # If the request comes from a preview domain, use the proxy endpoint
+        host = req.headers.get("host", "")
+        if "preview.foundingdev.com" in host or "localhost" not in host:
+            # Use the proxy endpoint through the API
+            tusd_url = f"{req.url.scheme}://{host}/api/v1/upload/files/"
+        else:
+            # Use the configured public endpoint (for local development)
+            tusd_url = settings.tusd_public_endpoint
+
+        logger.info(f"Returning Tusd URL: {tusd_url}")
+
         # Return the Tusd endpoint URL
         # The client will send metadata (including pdf_id) in the Upload-Metadata header
         return InitUploadResponse(
             pdf_id=str(pdf_id),
-            tusd_upload_url=settings.tusd_public_endpoint,
+            tusd_upload_url=tusd_url,
             message="Upload initialized successfully. Use Tusd endpoint to upload file.",
         )
 

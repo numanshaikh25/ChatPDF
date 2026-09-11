@@ -28,7 +28,9 @@ class PDF(Base):
         # pending, processing, completed, failed
     )
     error_message: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False
     )
@@ -43,12 +45,18 @@ class PDFChunk(Base):
     __tablename__ = "pdf_chunks"
 
     id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), primary_key=True, default=uuid.uuid4)
-    pdf_id: Mapped[uuid.UUID] = mapped_column(UUID(as_uuid=True), ForeignKey("pdfs.id", ondelete="CASCADE"), nullable=False)
+    pdf_id: Mapped[uuid.UUID] = mapped_column(
+        UUID(as_uuid=True), ForeignKey("pdfs.id", ondelete="CASCADE"), nullable=False
+    )
     chunk_text: Mapped[str] = mapped_column(Text, nullable=False)
     page_number: Mapped[Optional[int]] = mapped_column(Integer, nullable=True)
     chunk_index: Mapped[int] = mapped_column(Integer, nullable=False)
-    embedding: Mapped[Optional[Vector]] = mapped_column(Vector(1536), nullable=True)  # OpenAI text-embedding-3-small dimension
-    created_at: Mapped[datetime] = mapped_column(DateTime(timezone=True), server_default=func.now(), nullable=False)
+    embedding: Mapped[Optional[Vector]] = mapped_column(
+        Vector(1536), nullable=True
+    )  # OpenAI text-embedding-3-small dimension
+    created_at: Mapped[datetime] = mapped_column(
+        DateTime(timezone=True), server_default=func.now(), nullable=False
+    )
 
     # Indexes
     __table_args__ = (

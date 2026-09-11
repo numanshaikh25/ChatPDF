@@ -1,6 +1,7 @@
 'use client'
 
-import { FileText, Loader2, Trash2, CheckCircle2, XCircle, Clock, UploadCloud } from 'lucide-react'
+import { useState } from 'react'
+import { FileText, Loader2, Trash2, CheckCircle2, XCircle, Clock, UploadCloud, Search, X } from 'lucide-react'
 import { usePDFList, useDeletePDF, usePDFStatus } from '@/hooks/usePDF'
 import { formatBytes } from '@/lib/utils'
 import toast from 'react-hot-toast'
@@ -127,6 +128,7 @@ function PDFSkeleton() {
 export function PDFList({ selectedPdfId, onSelect }: PDFListProps) {
   const { data, isLoading } = usePDFList()
   const deleteMutation = useDeletePDF()
+  const [searchQuery, setSearchQuery] = useState('')
 
   const handleDelete = async (pdfId: string, filename: string) => {
     if (!confirm(`Delete "${filename}"?\n\nThis will also erase all chat history.`)) return
@@ -159,17 +161,59 @@ export function PDFList({ selectedPdfId, onSelect }: PDFListProps) {
     )
   }
 
+  // Filter PDFs based on search query
+  const filteredPdfs = data.pdfs.filter((pdf) =>
+    pdf.filename.toLowerCase().includes(searchQuery.toLowerCase())
+  )
+
   return (
-    <div className="py-1">
-      {data.pdfs.map((pdf) => (
-        <PDFListItem
-          key={pdf.pdf_id}
-          pdf={pdf}
-          isSelected={selectedPdfId === pdf.pdf_id}
-          onSelect={() => onSelect(pdf.pdf_id)}
-          onDelete={() => handleDelete(pdf.pdf_id, pdf.filename)}
-        />
-      ))}
+    <div className="flex flex-col flex-1 overflow-hidden pb-3">
+      {/* Search bar */}
+      <div className="px-2 pb-2 pt-1 shrink-0">
+        <div className="relative">
+          <Search className="absolute left-2.5 top-1/2 -translate-y-1/2 h-3.5 w-3.5 text-muted-foreground pointer-events-none" />
+          <input
+            type="text"
+            placeholder="Search documents..."
+            value={searchQuery}
+            onChange={(e) => setSearchQuery(e.target.value)}
+            className="w-full h-8 pl-8 pr-8 text-xs rounded-lg bg-muted border-0 placeholder:text-muted-foreground/60 focus:outline-none focus:ring-1 focus:ring-primary/30 transition-all"
+          />
+          {searchQuery && (
+            <button
+              onClick={() => setSearchQuery('')}
+              className="absolute right-2 top-1/2 -translate-y-1/2 h-5 w-5 flex items-center justify-center rounded-md text-muted-foreground hover:bg-accent hover:text-foreground transition-all"
+            >
+              <X className="h-3 w-3" />
+            </button>
+          )}
+        </div>
+      </div>
+
+      {/* Document list */}
+      <div className="flex-1 overflow-y-auto">
+        {filteredPdfs.length === 0 ? (
+          <div className="flex flex-col items-center justify-center py-10 px-4 text-center">
+            <div className="flex h-10 w-10 items-center justify-center rounded-2xl bg-muted mb-3">
+              <Search className="h-5 w-5 text-muted-foreground" />
+            </div>
+            <p className="text-xs font-semibold text-muted-foreground">No matching documents</p>
+            <p className="text-[11px] text-muted-foreground/60 mt-1">Try a different search term</p>
+          </div>
+        ) : (
+          <div className="py-1">
+            {filteredPdfs.map((pdf) => (
+              <PDFListItem
+                key={pdf.pdf_id}
+                pdf={pdf}
+                isSelected={selectedPdfId === pdf.pdf_id}
+                onSelect={() => onSelect(pdf.pdf_id)}
+                onDelete={() => handleDelete(pdf.pdf_id, pdf.filename)}
+              />
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   )
 }

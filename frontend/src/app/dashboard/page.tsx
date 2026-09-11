@@ -78,7 +78,7 @@ export default function DashboardPage() {
                 <FileText className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-sm font-bold tracking-tight leading-none text-gradient-brand">Onpdf</h1>
+                <h1 className="text-sm font-bold tracking-tight leading-none text-gradient-brand">Dokument</h1>
                 <p className="text-[10px] text-muted-foreground mt-0.5">AI document assistant</p>
               </div>
             </div>
@@ -134,12 +134,10 @@ export default function DashboardPage() {
                 Documents
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto pb-3">
-              <PDFList
-                selectedPdfId={activeDoc?.type === 'pdf' ? activeDoc.id : null}
-                onSelect={(pdfId) => setActiveDoc({ id: pdfId, type: 'pdf' })}
-              />
-            </div>
+            <PDFList
+              selectedPdfId={activeDoc?.type === 'pdf' ? activeDoc.id : null}
+              onSelect={(pdfId) => setActiveDoc({ id: pdfId, type: 'pdf' })}
+            />
           </>
         ) : (
           <>
@@ -151,12 +149,10 @@ export default function DashboardPage() {
                 Images
               </p>
             </div>
-            <div className="flex-1 overflow-y-auto pb-3">
-              <ImageList
-                selectedImageId={activeDoc?.type === 'image' ? activeDoc.id : null}
-                onSelect={(imageId) => setActiveDoc({ id: imageId, type: 'image' })}
-              />
-            </div>
+            <ImageList
+              selectedImageId={activeDoc?.type === 'image' ? activeDoc.id : null}
+              onSelect={(imageId) => setActiveDoc({ id: imageId, type: 'image' })}
+            />
           </>
         )}
 

@@ -67,39 +67,24 @@ export default function SignupPage() {
 
   if (isLoading) {
     return (
-      <div className="flex h-screen items-center justify-center bg-background">
-        <Loader2 className="h-6 w-6 animate-spin text-muted-foreground" />
+      <div className="flex h-screen items-center justify-center bg-white">
+        <Loader2 className="h-6 w-6 animate-spin text-gray-400" />
       </div>
     )
   }
 
   return (
-    <div className="flex min-h-screen items-center justify-center bg-background px-4 py-10">
-      {/* Background gradient blobs */}
-      <div className="pointer-events-none fixed inset-0 overflow-hidden">
-        <div
-          className="absolute -top-40 -right-40 h-80 w-80 rounded-full opacity-20 blur-3xl"
-          style={{ background: 'var(--gradient-brand)' }}
-        />
-        <div
-          className="absolute -bottom-40 -left-40 h-80 w-80 rounded-full opacity-10 blur-3xl"
-          style={{ background: 'var(--gradient-brand)' }}
-        />
-      </div>
-
+    <div className="flex min-h-screen items-center justify-center bg-white px-4 py-10">
       <div className="relative w-full max-w-sm animate-slide-up">
-        <div className="rounded-2xl border border-border bg-card p-8 shadow-xl">
+        <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-lg">
           {/* Brand */}
           <div className="mb-8 flex flex-col items-center gap-3">
-            <div
-              className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg ring-2 ring-white/20"
-              style={{ background: 'var(--gradient-brand)' }}
-            >
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-700 shadow-lg">
               <FileText className="h-6 w-6 text-white" />
             </div>
             <div className="text-center">
-              <h1 className="text-xl font-bold tracking-tight">Create account</h1>
-              <p className="mt-1 text-sm text-muted-foreground">Join Onpdf today</p>
+              <h1 className="text-xl font-bold tracking-tight text-gray-900">Create account</h1>
+              <p className="mt-1 text-sm text-gray-600">Join Dokument today</p>
             </div>
           </div>
 
@@ -107,8 +92,8 @@ export default function SignupPage() {
           <form onSubmit={handleSubmit} className="space-y-4">
             {/* Full name */}
             <div className="space-y-1.5">
-              <label htmlFor="fullName" className="text-sm font-medium">
-                Full name <span className="text-muted-foreground">(optional)</span>
+              <label htmlFor="fullName" className="text-sm font-medium text-gray-700">
+                Full name <span className="text-gray-600">(optional)</span>
               </label>
               <input
                 id="fullName"
@@ -117,13 +102,13 @@ export default function SignupPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Jane Doe"
-                className="w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-xl border border-gray-200 bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20"
               />
             </div>
 
             {/* Username */}
             <div className="space-y-1.5">
-              <label htmlFor="username" className="text-sm font-medium">
+              <label htmlFor="username" className="text-sm font-medium text-gray-700">
                 Username
               </label>
               <input
@@ -134,16 +119,16 @@ export default function SignupPage() {
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder="janedoe"
-                className={`w-full rounded-xl border bg-background px-3.5 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-xl border bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
                   usernameError
                     ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                    : 'border-input focus:border-primary focus:ring-primary/20'
+                    : 'border-input focus:border-purple-600 focus:ring-purple-600/20'
                 }`}
               />
               {usernameError ? (
                 <p className="text-xs text-destructive">{usernameError}</p>
               ) : (
-                <p className="text-xs text-muted-foreground">
+                <p className="text-xs text-gray-600">
                   Letters, numbers, underscores, and dashes only
                 </p>
               )}
@@ -151,7 +136,7 @@ export default function SignupPage() {
 
             {/* Email */}
             <div className="space-y-1.5">
-              <label htmlFor="email" className="text-sm font-medium">
+              <label htmlFor="email" className="text-sm font-medium text-gray-700">
                 Email
               </label>
               <input
@@ -162,13 +147,13 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-input bg-background px-3.5 py-2.5 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                className="w-full rounded-xl border border-gray-200 bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20"
               />
             </div>
 
             {/* Password */}
             <div className="space-y-1.5">
-              <label htmlFor="password" className="text-sm font-medium">
+              <label htmlFor="password" className="text-sm font-medium text-gray-700">
                 Password
               </label>
               <div className="relative">
@@ -181,12 +166,12 @@ export default function SignupPage() {
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   placeholder="Min. 8 characters"
-                  className="w-full rounded-xl border border-input bg-background px-3.5 py-2.5 pr-10 text-sm placeholder:text-muted-foreground/60 focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
+                  className="w-full rounded-xl border border-gray-200 bg-white text-gray-900 px-3.5 py-2.5 pr-10 text-sm placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword((v) => !v)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground hover:text-foreground"
+                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-600 hover:text-gray-900"
                   tabIndex={-1}
                 >
                   {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
@@ -198,8 +183,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-60"
-              style={{ background: 'var(--gradient-brand)' }}
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-700 hover:from-purple-700 hover:to-violet-800 py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-60 transition-all"
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
               {submitting ? 'Creating account…' : 'Create account'}
@@ -207,9 +191,9 @@ export default function SignupPage() {
           </form>
 
           {/* Footer */}
-          <p className="mt-6 text-center text-sm text-muted-foreground">
+          <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-primary hover:underline">
+            <Link href="/login" className="font-medium text-purple-600 hover:underline">
               Sign in
             </Link>
           </p>
