@@ -89,3 +89,9 @@ async def root():
 async def health_check():
     """Health check endpoint"""
     return {"status": "healthy", "app": settings.app_name, "environment": settings.environment}
+
+
+@app.get("/api/health")
+async def api_health_check():
+    """API health check endpoint"""
+    return {"status": "healthy", "app": settings.app_name, "environment": settings.environment}

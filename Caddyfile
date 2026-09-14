@@ -4,6 +4,11 @@
             header_up Host localhost
         }
     }
+    handle /health {
+        reverse_proxy backend:8000 {
+            header_up Host localhost
+        }
+    }
     handle_path /_svc/tusd/* {
         reverse_proxy tusd:8080 {
             header_up Host localhost
