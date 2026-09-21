@@ -1,3 +1,19 @@
+/*
+ * DESIGN SYSTEM — ChatPDF / Dokument
+ *
+ * Aesthetic Direction: Warm-Editorial
+ * Rationale: Document-centric chat tool favors a warm, humane, unhurried feel.
+ * References: Notion (warm surfaces, readable typography), Craft (refined simplicity),
+ *             Document-focused tools that prioritize reading and conversation.
+ *
+ * Key decisions:
+ * - Warm green (142° hue, 71% sat, 33% light) as primary — natural, calm, readable
+ * - DM Sans display + Inter body — humanist warmth with clean UI legibility
+ * - 10px radius (0.625rem) — soft but not overly rounded
+ * - Generous padding, comfortable density — space to breathe while reading/chatting
+ * - Subtle shadows and borders — layered depth without harshness
+ */
+
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
@@ -26,10 +42,10 @@
     --border: 220 14% 88%;
     --input: 220 14% 88%;
 
-    /* Brand — Red */
-    --primary: 0 72% 51%;
+    /* Brand — Green (Warm-Editorial direction for document work) */
+    --primary: 142 71% 33%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 0 72% 45%;
+    --primary-hover: 142 71% 28%;
 
     /* Secondary */
     --secondary: 260 20% 94%;
@@ -44,7 +60,7 @@
     --destructive-foreground: 0 0% 100%;
 
     /* Success */
-    --success: 142 60% 38%;
+    --success: 142 71% 33%;
     --success-foreground: 0 0% 100%;
 
     /* Warning */
@@ -52,7 +68,7 @@
     --warning-foreground: 0 0% 100%;
 
     /* Focus ring */
-    --ring: 0 72% 51%;
+    --ring: 142 71% 33%;
 
     /* Radius */
     --radius: 0.625rem;
@@ -62,7 +78,7 @@
     --sidebar-border: 260 18% 90%;
 
     /* Gradient tokens */
-    --gradient-brand: linear-gradient(135deg, hsl(0 72% 51%) 0%, hsl(10 72% 55%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(142 71% 33%) 0%, hsl(152 71% 37%) 100%);
     --gradient-surface: linear-gradient(160deg, hsl(260 20% 96%) 0%, hsl(260 20% 94%) 100%);
     --gradient-muted: linear-gradient(135deg, hsl(260 14% 92%) 0%, hsl(260 14% 91%) 100%);
   }
@@ -74,10 +90,18 @@
   }
   body {
     @apply bg-white text-gray-900 antialiased;
+    font-family: var(--font-inter), system-ui, sans-serif;
     font-feature-settings: "rlig" 1, "calt" 1;
   }
   h1, h2, h3, h4, h5, h6 {
-    @apply font-semibold tracking-tight;
+    font-family: var(--font-display), system-ui, sans-serif;
+    @apply font-semibold;
+  }
+  h1 {
+    @apply tracking-tighter;
+  }
+  h2, h3 {
+    @apply tracking-tight;
   }
   /* Force light mode */
   html {
