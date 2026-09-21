@@ -26,10 +26,10 @@
     --border: 220 14% 88%;
     --input: 220 14% 88%;
 
-    /* Brand — Purple */
-    --primary: 262 83% 58%;
+    /* Brand — Red */
+    --primary: 0 72% 51%;
     --primary-foreground: 0 0% 100%;
-    --primary-hover: 262 83% 50%;
+    --primary-hover: 0 72% 45%;
 
     /* Secondary */
     --secondary: 260 20% 94%;
@@ -52,7 +52,7 @@
     --warning-foreground: 0 0% 100%;
 
     /* Focus ring */
-    --ring: 262 83% 58%;
+    --ring: 0 72% 51%;
 
     /* Radius */
     --radius: 0.625rem;
@@ -62,7 +62,7 @@
     --sidebar-border: 260 18% 90%;
 
     /* Gradient tokens */
-    --gradient-brand: linear-gradient(135deg, hsl(262 83% 58%) 0%, hsl(272 83% 62%) 100%);
+    --gradient-brand: linear-gradient(135deg, hsl(0 72% 51%) 0%, hsl(10 72% 55%) 100%);
     --gradient-surface: linear-gradient(160deg, hsl(260 20% 96%) 0%, hsl(260 20% 94%) 100%);
     --gradient-muted: linear-gradient(135deg, hsl(260 14% 92%) 0%, hsl(260 14% 91%) 100%);
   }
