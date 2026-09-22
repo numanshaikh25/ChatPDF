@@ -79,8 +79,8 @@ export default function SignupPage() {
         <div className="rounded-2xl border border-gray-200 bg-white p-8 shadow-lg">
           {/* Brand */}
           <div className="mb-8 flex flex-col items-center gap-3">
-            <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-gradient-to-br from-purple-600 to-violet-700 shadow-lg">
-              <FileText className="h-6 w-6 text-white" />
+            <div className="flex h-12 w-12 items-center justify-center rounded-2xl shadow-lg" style={{ background: 'var(--gradient-brand)' }}>
+              <FileText className="h-6 w-6 text-primary-foreground" />
             </div>
             <div className="text-center">
               <h1 className="text-xl font-bold tracking-tight text-gray-900">Create account</h1>
@@ -102,7 +102,7 @@ export default function SignupPage() {
                 value={fullName}
                 onChange={(e) => setFullName(e.target.value)}
                 placeholder="Jane Doe"
-                className="w-full rounded-xl border border-gray-200 bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20"
+                className="w-full rounded-xl border border-input bg-background text-foreground px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -119,10 +119,10 @@ export default function SignupPage() {
                 value={username}
                 onChange={handleUsernameChange}
                 placeholder="janedoe"
-                className={`w-full rounded-xl border bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:outline-none focus:ring-2 ${
+                className={`w-full rounded-xl border bg-background text-foreground px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:outline-none focus:ring-2 ${
                   usernameError
                     ? 'border-destructive focus:border-destructive focus:ring-destructive/20'
-                    : 'border-input focus:border-purple-600 focus:ring-purple-600/20'
+                    : 'border-input focus:border-primary focus:ring-primary/20'
                 }`}
               />
               {usernameError ? (
@@ -147,7 +147,7 @@ export default function SignupPage() {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="you@example.com"
-                className="w-full rounded-xl border border-gray-200 bg-white text-gray-900 px-3.5 py-2.5 text-sm placeholder:text-gray-400 focus:border-purple-600 focus:outline-none focus:ring-2 focus:ring-purple-600/20"
+                className="w-full rounded-xl border border-input bg-background text-foreground px-3.5 py-2.5 text-sm placeholder:text-muted-foreground focus:border-primary focus:outline-none focus:ring-2 focus:ring-primary/20"
               />
             </div>
 
@@ -183,7 +183,7 @@ export default function SignupPage() {
             <button
               type="submit"
               disabled={submitting}
-              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-gradient-to-r from-purple-600 to-violet-700 hover:from-purple-700 hover:to-violet-800 py-2.5 text-sm font-semibold text-white shadow-sm disabled:opacity-60 transition-all"
+              className="mt-2 flex w-full items-center justify-center gap-2 rounded-xl bg-primary hover:bg-primary-hover py-2.5 text-sm font-semibold text-primary-foreground shadow-sm disabled:opacity-60 transition-all"
             >
               {submitting && <Loader2 className="h-4 w-4 animate-spin" />}
               {submitting ? 'Creating account…' : 'Create account'}
@@ -193,7 +193,7 @@ export default function SignupPage() {
           {/* Footer */}
           <p className="mt-6 text-center text-sm text-gray-600">
             Already have an account?{' '}
-            <Link href="/login" className="font-medium text-purple-600 hover:underline">
+            <Link href="/login" className="font-medium text-primary hover:underline">
               Sign in
             </Link>
           </p>

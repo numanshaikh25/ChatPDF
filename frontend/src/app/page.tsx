@@ -6,7 +6,7 @@ import { useAuth } from '@/contexts/AuthContext'
 
 export default function HomePage() {
   const router = useRouter()
-  const { isAuthenticated, isLoading } = useAuth()
+  const { isLoading } = useAuth()
 
   useEffect(() => {
     // Always redirect to dashboard - auth middleware will handle login redirect
