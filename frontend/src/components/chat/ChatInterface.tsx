@@ -151,6 +151,7 @@ export function ChatInterface({ activeDoc, sidebarOpen }: ChatInterfaceProps) {
 
         <div className="text-center max-w-sm">
           <h2 className="text-xl font-bold mb-1">Chat with your documents</h2>
+          <p className="text-base text-foreground/80 font-medium mb-2">Chat with any PDF, instantly.</p>
           <p className="text-sm text-muted-foreground leading-relaxed">
             Upload a PDF or image, then start asking questions about it.
           </p>
