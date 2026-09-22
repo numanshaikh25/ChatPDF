@@ -78,7 +78,7 @@ export default function DashboardPage() {
                 <FileText className="h-4 w-4 text-white" />
               </div>
               <div>
-                <h1 className="text-sm font-bold tracking-tight leading-none text-gradient-brand">Dokument</h1>
+                <h1 className="text-sm font-bold tracking-tight leading-none text-gradient-brand font-serif">Dokument</h1>
                 <p className="text-[10px] text-muted-foreground mt-0.5">AI document assistant</p>
               </div>
             </div>
