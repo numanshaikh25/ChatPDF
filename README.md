@@ -309,3 +309,5 @@ uv run alembic upgrade head
 ## License
 
 MIT
+
+<!-- panel verification 2026-09-22 -->
