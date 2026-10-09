@@ -1,0 +1,74 @@
+# ─── SHARED PREFIX — keep BYTE-IDENTICAL with Dockerfile.client ──────────────
+# BuildKit shares layer cache across the two images only while their
+# instruction streams are identical. Everything down to `RUN npm ci` matches
+# Dockerfile.client exactly, so the expensive workspace install is built ONCE
+# per machine and reused by whichever image builds second. It is also the
+# layer prebuilt image tarballs warm via compose's cache_from. Diverge only
+# BELOW the end-of-prefix marker, and never edit the prefix in one file
+# without the other.
+#
+# openssl: required by the Prisma engine binary on alpine (server-side need);
+# ~1 MB in the client image — the price of an identical prefix.
+FROM node:20-alpine
+
+RUN apk add --no-cache openssl
+
+WORKDIR /app
+
+# Root workspace manifests + workspace package.jsons: the full graph `npm ci`
+# needs. tsconfig.base.json is REQUIRED at runtime, not just typechecking —
+# every workspace tsconfig does `"extends": "../tsconfig.base.json"`, and the
+# bind mounts in docker-compose.yml cover ./client, ./server and ./shared but
+# NOT root-level files, so this COPY is the only thing that puts it in the
+# image. Without it, `paths` silently fails to resolve and every `@shared/...`
+# import dies with ERR_MODULE_NOT_FOUND.
+COPY package.json package-lock.json ./
+COPY tsconfig.base.json ./
+COPY shared/package.json ./shared/
+COPY client/package.json ./client/
+COPY server/package.json ./server/
+
+# npm ci, not npm install: deterministic from the committed lockfile, and it
+# fails LOUDLY when package.json and the lockfile disagree instead of silently
+# reconciling them (a silent reconcile here defeats the prebuilt-image
+# fingerprint downstream). server's postinstall (prisma generate || true)
+# no-ops in this layer — the schema is COPYed per-image after the prefix.
+RUN npm ci
+# ─── END SHARED PREFIX ───────────────────────────────────────────────────────
+
+# pg_dump / pg_restore for the backups module (server/src/services/backups).
+# SERVER-ONLY — deliberately below the shared prefix, so the client image (which
+# never backs up a database) stays lean and the prefix stays byte-identical.
+# The meta-package tracks this Alpine release's default Postgres major, which is
+# >= the compose db (postgres:16); a client newer than the server is supported.
+RUN apk add --no-cache postgresql-client
+
+# The schema arrives after the shared install layer, so postinstall's generate
+# was a no-op above; generate for real now that the schema exists.
+COPY server/prisma ./server/prisma
+RUN npx --workspace server prisma generate || true
+
+# Bake the workspace SOURCE into the image so the PRODUCTION container is
+# self-contained. In dev, docker-compose bind-mounts ./server and ./shared over
+# these paths, so this COPY is inert for the preview — it matters only in prod
+# (Fly native), where there are NO bind mounts and the image must ship its own
+# code. Without it the prod image carries only package.json + prisma and `tsx`
+# dies with `ERR_MODULE_NOT_FOUND: src/index.ts` — the container "runs" but never
+# binds :3001, so every request 502s (the exact prod-publish failure this fixes).
+# .dockerignore keeps node_modules / build output out of these COPYs.
+COPY shared ./shared
+COPY server ./server
+
+WORKDIR /app/server
+EXPOSE 3001
+
+# Installed to /usr/local/bin, NOT left at /app/server/docker-entrypoint.sh, so
+# the `./server:/app/server` bind mount in docker-compose.yml cannot shadow it.
+COPY server/docker-entrypoint.sh /usr/local/bin/docker-entrypoint.sh
+RUN chmod +x /usr/local/bin/docker-entrypoint.sh
+
+# The entrypoint applies pending migrations, then either execs this CMD (dev
+# preview → tsx watch) or, when NODE_ENV=production, runs the prod server.
+# Without it the API boots against an empty database and every data route 500s.
+ENTRYPOINT ["/usr/local/bin/docker-entrypoint.sh"]
+CMD ["npm", "run", "dev"]
