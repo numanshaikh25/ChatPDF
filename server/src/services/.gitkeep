@@ -1,3 +1,0 @@
-# Business logic lives here — one file per resource (users.ts, posts.ts, ...).
-# Routes call services; services call db. Keeps route handlers thin and
-# reusable across REST + background jobs.
